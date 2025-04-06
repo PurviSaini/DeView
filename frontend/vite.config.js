@@ -1,13 +1,16 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { config } from 'dotenv';
-config();
-// https://vite.dev/config/
-export default defineConfig({
-  server: {
-    proxy:{
-      "/api":"https://de-view-backend.vercel.app/",
-    }
-  },
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-})
+  server: {
+    proxy: {
+      '/api': {
+        target: mode === 'production' ? 'https://de-view-backend.vercel.app' : 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: false,
+      },
+    },
+  },
+}));
