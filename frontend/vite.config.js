@@ -6,7 +6,7 @@ config();
 export default defineConfig({
   server: {
     proxy:{
-      "/api":"http://localhost:3000",
+      "/api":"https://de-view-backend.vercel.app/",
     }
   },
   plugins: [react()],
