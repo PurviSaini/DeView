@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import Login from './components/Login'
 import Register from './components/Register'
-import Team from './pages/team'
+import Team from './pages/Team'
 import './App.css'
 import axios from 'axios'
 
