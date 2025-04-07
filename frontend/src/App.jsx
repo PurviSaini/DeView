@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
+import Login from './components/Login'
+import Register from './components/Register'
 import './App.css'
 import axios from 'axios'
 
@@ -18,7 +20,9 @@ function App() {
 
   return (
     <>
-      <h1> Hello this is frontend!! </h1>
+    {/* <Login/> */}
+    <Register/>
+      {/* <h1> Hello this is frontend!! </h1>
         <p>Fruits: {fruits.length} </p>
       {
         fruits.map((fruit, index) => (
@@ -27,7 +31,7 @@ function App() {
             <p>{fruit.content}</p>
           </div>
         ))    
-      }
+      } */}
     </>
   )
 }
