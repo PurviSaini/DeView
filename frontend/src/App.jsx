@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import Login from './components/Login'
 import Register from './components/Register'
+import Team from './pages/Team'
 import './App.css'
 import axios from 'axios'
 
@@ -21,7 +22,7 @@ function App() {
   return (
     <>
     {/* <Login/> */}
-    <Register/>
+    <Team />
       {/* <h1> Hello this is frontend!! </h1>
         <p>Fruits: {fruits.length} </p>
       {

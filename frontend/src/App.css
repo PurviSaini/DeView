@@ -4,12 +4,16 @@
   color: white;
 }
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/*
+#root {*/
+  /*max-width: 1280px;*/
+  /*min-height: 100%;
+  min-width: 100%;
+  margin: 0 0 0 0; */
   /* padding: 0rem; */
-  text-align: center;
+  /*text-align: center;
 }
+
 
 .logo {
   height: 6em;
@@ -46,3 +50,4 @@
 .read-the-docs {
   color: #888;
 }
+*/
