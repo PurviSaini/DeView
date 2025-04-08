@@ -12,7 +12,7 @@ form{
     padding: 10px 173px;
     text-align: center;
     background-color: rgba(66, 66, 66, 0.2);
-    box-shadow: 0px 0px 165px rgb(36, 36, 36);
+    box-shadow: 0px 0px 105px rgb(54, 54, 54);
 }
 
 form> #heading{
@@ -29,12 +29,13 @@ label{
 input{
     margin-top: 10px;
     margin-bottom: 20px;
-    width: 300px;
+    width: 23vw;
     height: 35px;
     border-radius: 10px;
     border-color: white;
     padding:2px 5px;
     background: transparent;
+    color: rgb(190, 190, 190);
 }
 
 input:focus{
@@ -61,6 +62,7 @@ form> button{
     border-radius: 7px;
     margin-top: 2rem;
     border: none;
+    color: white;
 }
 
 form> button:hover{
@@ -74,4 +76,9 @@ form> p{
 .register-btn, .login-btn{
     color: #c1ff72;
     background: transparent;
+    text-decoration: none;
+}
+
+.register-btn:hover, .login-btn:hover{
+    color:#95c25a;
 }

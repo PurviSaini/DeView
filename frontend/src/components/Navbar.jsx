@@ -1,9 +1,10 @@
 import './Navbar.css'
 
-export default function Navbar(){
+export default function Navbar({loggedIn}){
     return (
         <nav className='sticky-top'>
-            <p>DeView</p>
+            <span>DeView</span>
+            {loggedIn && <span className='user'><i className="fa fa-user-o"></i></span>}
         </nav>
     )
 }

@@ -1,12 +1,22 @@
 nav{
     background-color: #555555;
-    padding: 1px;
+    padding: 10px;
     text-align: center;
     top: 0;
 }
-nav> p{
+nav> span{
     background-color: #555555;
     color: white;
     font-weight: bold;
-    padding-top: 5px;
+    font-size: 24px;
+}
+
+span.user{
+    position: absolute;
+    right: 20px;
+    font-size: 20px;
+    background-color: #03c0fa;
+    padding: 3px 10px;
+    border-radius: 50%;
+    cursor: pointer;
 }

@@ -14,26 +14,26 @@ export default function Login(){
     };
     return (
         <div>
-            <Navbar/>
-            <form class='log_register' action="/">
+            <Navbar loggedIn={true}/>
+            <form className='log_register' action="/">
                 <p id='heading'>Log In</p>
                 {/* input for email */}
-                <label for="email"><i class="fa fa-envelope-o"></i> &nbsp;Email Address</label>
+                <label htmlFor="username"><i className="fa fa-user-o"></i> &nbsp;Username</label>
                 <br/>
-                <input type="email" name="email" id="e-mail" placeholder="example@gmail.com" required/>
+                <input type="username" name="username" id="username" placeholder="Enter your username" required/>
                 <br/>
                 {/* input for password */}
-                <label for="password"><i class="fa fa-lock"></i> &nbsp; Password</label>
+                <label htmlFor="password"><i className="fa fa-lock"></i> &nbsp; Password</label>
                 <br/>
-                <input type="password" name="password" id="passwd" placeholder="Shh!!, it's secret" required/>
+                <input type="password" name="password" id="password" placeholder="Shh!!, it's secret" required/>
                 <br/>
 
                 <button onClick={handleLogin}>Log In</button>
-                <p>Don't have an account? <a href="/">
+                <p>Don't have an account? &nbsp;
                     <NavLink to="/register" className="register-btn">
                         Register
                     </NavLink>
-                </a></p>
+                </p>
             </form>
         </div>
     )
