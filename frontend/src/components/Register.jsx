@@ -1,7 +1,10 @@
 // import './Register.css'
+import { useNavigate, NavLink } from 'react-router-dom'
 import './Login.css'
 import Navbar from './Navbar'
+
 export default function Register(){
+    const navigate = useNavigate();
     return (
         <div>
             <Navbar/>
@@ -22,8 +25,12 @@ export default function Register(){
                 <br/>
                 <input type="password" name="password" id="passwd" placeholder="Shh!!, it's secret" required/>
                 <br/>
-                <button>Register</button>
-                <p>Already registered? <a href="/">Login</a></p>
+                <button >Register</button>
+                <p>Already registered? <a href="/">
+                    <NavLink to="/" className="login-btn">
+                    Login
+                    </NavLink>
+                </a></p>
             </form>
         </div>
     )
