@@ -28,16 +28,6 @@ function App() {
     {/* <Register></Register> */}
     {/* <Team /> */}
     {/* <Task /> */}
-      {/* <h1> Hello this is frontend!! </h1>
-        <p>Fruits: {fruits.length} </p>
-      {
-        fruits.map((fruit, index) => (
-          <div key={fruit.id}>
-            <h2>{fruit.title}</h2>
-            <p>{fruit.content}</p>
-          </div>
-        ))    
-      } */}
 
       <Routes>
         <Route path='/' element={<Login />} />
