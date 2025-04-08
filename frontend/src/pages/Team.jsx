@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Container, Row, Col, Button, Form, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
@@ -12,14 +13,26 @@ const Team = () => {
     const [inputValue, setInputValue] = useState('');
     const [teamCode, setTeamCode] = useState('');
     const [showAlert, setShowAlert] = useState(false);
-    const handleJoinTeam = (e) => {
+    const handleJoinTeam = async (e) => {
+        e.preventDefault();
         if (!teamCode) {
             setShowAlert(true);
             return;
         }
-        alert(`Joining team with code: ${teamCode}`);
-        setShowAlert(false);
-        // navigate('/task');
+
+        try {
+            const response = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/updateUser", {
+                code: teamCode,
+            });
+    
+            alert(`Joined team successfully!`);
+            console.log(response.data);
+            setShowAlert(false);
+            navigate('/task');
+        } catch (error) {
+            console.error('Error joining team:', error);
+            alert('Failed to join team. Please check the code.');
+        }
     };
 
     const generateTeamCode = () => {
