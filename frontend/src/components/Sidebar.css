@@ -1,0 +1,26 @@
+div#sidebar{
+    float: left;
+    background-color: grey;
+    padding: 10px;
+    /* height:47vmax; */
+    height: 87vh; 
+    overflow-y:auto;
+}
+
+a.row{
+    background-color: grey;
+    display: block;
+    text-decoration: none;
+    padding: 0.5rem;
+
+    font-size: 20px;
+    font-weight: 600;
+    transition: background-color 0.3s border-radius 0.2s;
+    /* transition: all 0.2s; */
+    margin-top: 1rem;
+}
+
+a.row:hover{
+    background-color: rgb(97, 97, 97);
+    border-radius: 7px;
+}

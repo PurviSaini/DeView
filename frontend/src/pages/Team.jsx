@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Form, Card, Alert } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import { Container, Row, Col, Button, Form, Card, Alert } from 'react-bootstrap';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import './Team.css'; 
 import team2 from "../assets/team2.png";
 import jointeam from '../assets/jointeam.png';
