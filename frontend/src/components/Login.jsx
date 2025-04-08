@@ -34,7 +34,6 @@ export default function Login(){
     };
     return (
         <div>
-            <Navbar loggedIn={true}/>
             <form className='log_register' action="/">
                 <p id='heading'>Log In</p>
                 {/* input for email */}
