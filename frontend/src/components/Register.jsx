@@ -52,7 +52,7 @@ export default function Register(){
                 <input type="password" value={password} onChange={(e)=>{setPassword(e.target.value)}} name="password" id="passwd" placeholder="Shh!!, it's secret" required/>
                 <br/>
                 <button onClick={handleRegister}>Register</button>
-                <p>Already registered? 
+                <p>Already registered? &nbsp;
                     <NavLink to="/" className="login-btn">
                     Login
                     </NavLink>
