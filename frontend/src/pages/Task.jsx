@@ -241,13 +241,13 @@ export default function Task(){
                                 <Modal.Title>Task Details</Modal.Title>
                             </Modal.Header>
                             <Modal.Body className="modal-bg-dark">
+                                <p><strong>Description:</strong></p>
+                                <p>{selectedTask.description || "No description provided."}</p>
                                 <p><strong>Title:</strong> {selectedTask.title}</p>
                                 <p><strong>Due Date:</strong> {selectedTask.dueDate}</p>
                                 <p><strong>Assigned To:</strong> {selectedTask.assignedTo}</p>
                                 <p><strong>Priority:</strong> {selectedTask.priority}</p>
                                 <p><strong>Status:</strong> {selectedTask.status}</p>
-                                <p><strong>Description:</strong></p>
-                                <p>{selectedTask.description || "No description provided."}</p>
                             </Modal.Body>
                             <Modal.Footer className="modal-bg-dark">
                                 <Button variant="secondary" onClick={handleCloseModal}>

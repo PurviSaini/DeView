@@ -24,6 +24,7 @@ function App() {
   return (
     <>
     {/* <Login/> */}
+    {/* <Register></Register> */}
     {/* <Team /> */}
     <Task />
       {/* <h1> Hello this is frontend!! </h1>

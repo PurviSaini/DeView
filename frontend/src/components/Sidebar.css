@@ -1,23 +1,21 @@
 div#sidebar{
     float: left;
     background-color: #ccd2dc;
-    padding: 10px; 
-    /* height:47vmax; */
     height: 100vh;
     position:fixed; 
     overflow-y:auto;
 }
 
 a.row{
-    background-color: #ccd2dc;
-    color: black;
+    /* background-color: #86878a; */
+    color: rgb(58, 57, 57);
     display: block;
     text-decoration: none;
-    padding: 0.5rem;
+    padding: 0.5rem 0.3rem;
 
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
-    transition: background-color 0.3s border-radius 0.2s;
+    transition: background-color 0.4s border-radius 0.5s color 0.7s;
     /* transition: all 0.2s; */
     margin-top: 1rem;
 }
@@ -29,5 +27,5 @@ a.row:hover{
 }
 
 a.row:first-child {
-    padding-top: 25%;
+    margin-top: 2rem;
 }
