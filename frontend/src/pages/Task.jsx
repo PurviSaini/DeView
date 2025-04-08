@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import { Form, Button, Card, Row, Col, Table, Modal } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../components/Navbar"
@@ -7,59 +8,80 @@ import './Task.css'
 
 export default function Task(){
     const [selectedTask, setSelectedTask] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
-  const handleShowDetails = (task) => {
-    setSelectedTask(task);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedTask(null);
-    setShowModal(false);
-  };
-
-  const [tasks, setTasks] = useState([]);
-  const [formData, setFormData] = useState({
-    title: "",
-    dueDate: "",
-    assignedTo: "",
-    priority: "",
-    description: "",
-  });
-
-  const teamMembers = ["Alice", "Bob", "Charlie", "Diana"];
-  const priorityOptions = ["High", "Medium", "Low"];
-  const statusOptions = ["To Do", "Ongoing", "Completed"];
-
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newTask = {
-      ...formData,
-      status: "To Do", // default status
+    const handleShowDetails = (task) => {
+        setSelectedTask(task);
+        setShowModal(true);
     };
-    setTasks((prev) => [...prev, newTask]);
-    setFormData({
-      title: "",
-      dueDate: "",
-      assignedTo: "",
-      priority: "",
-      description: "",
-    });
-  };
 
-  const handleTaskChange = (index, field, value) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index][field] = value;
-    setTasks(updatedTasks);
-  };
+    const handleCloseModal = () => {
+        setSelectedTask(null);
+        setShowModal(false);
+    };
+
+    const [tasks, setTasks] = useState([]);
+    const [formData, setFormData] = useState({
+        title: "",
+        dueDate: "",
+        assignedTo: "",
+        priority: "",
+        description: "",
+    });
+
+    const teamMembers = ["Alice", "Bob", "Charlie", "Diana"];
+    const priorityOptions = ["High", "Medium", "Low"];
+    const statusOptions = ["To Do", "Ongoing", "Completed"];
+
+    const handleChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const newTask = {
+            ...formData,
+            status: "To Do", // default status
+        };
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/tasks`, newTask);
+
+            setTasks((prev) => [...prev, res.data.task || newTask]);
+            setFormData({
+                title:"",
+                dueDate:"",
+                assignedTo:"",
+                priority:"",
+                description:"",
+            });
+            alert("Task added successfully!");
+        } catch (err) {
+            alert("Failed to add task");
+            console.error(err);
+        }
+    };
+
+    const handleTaskChange = async (index, field, value) => {
+        const updatedTasks = [...tasks];
+        updatedTasks[index][field] = value;
+        setTasks(updatedTasks);
+
+        const taskId = updatedTasks[index]._id;
+
+        try {
+            await axios.patch(
+                `${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`,
+                { [field]: value }
+            );
+            console.log(`Task ${taskId} field '${field}' updated to '${value}'`);
+        } catch (err) {
+            alert("Failed to update task field");
+            console.error(err);
+        }
+    };
     return (
         <div>
             <Sidebar/>
