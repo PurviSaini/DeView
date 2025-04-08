@@ -33,7 +33,6 @@ export default function Register(){
     }
     return (
         <div>
-            <Navbar/>
             <form>
                 <p id='heading'>Register</p>
                 {/* input for username */}

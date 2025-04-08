@@ -20,3 +20,30 @@ span.user{
     border-radius: 50%;
     cursor: pointer;
 }
+
+div.dropdown{
+    display: inline;
+    position: absolute;
+    right: 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+div.dropdown>button.no-arrow{
+    background-color: #03c0fa;
+    padding: 3px 10px;
+    border-radius: 50%;   
+    border: none;
+}
+
+div.dropdown>button.no-arrow:active{
+    background-color: #03c0fa;
+}
+
+div.dropdown>button.no-arrow:hover{
+    background-color: #03b3e9;
+}
+
+.no-arrow::after {
+    display: none !important;
+  }
