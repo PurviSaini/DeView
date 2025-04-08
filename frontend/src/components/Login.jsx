@@ -4,7 +4,7 @@ export default function Login(){
     return (
         <div>
             <Navbar/>
-            <form action="/">
+            <form class='log_register' action="/">
                 <p id='heading'>Log In</p>
                 {/* input for email */}
                 <label for="email"><i class="fa fa-envelope-o"></i> &nbsp;Email Address</label>
