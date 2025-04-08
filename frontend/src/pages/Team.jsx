@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Form, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 import './Team.css'; 
 import team2 from "../assets/team2.png";
 import jointeam from '../assets/jointeam.png';
 import Navbar from '../components/Navbar'
 
 const Team = () => {
+    const navigate = useNavigate();
     const [inputValue, setInputValue] = useState('');
     const [teamCode, setTeamCode] = useState('');
     const [showAlert, setShowAlert] = useState(false);
@@ -17,6 +19,7 @@ const Team = () => {
         }
         alert(`Joining team with code: ${teamCode}`);
         setShowAlert(false);
+        // navigate('/task');
     };
 
     const generateTeamCode = () => {
