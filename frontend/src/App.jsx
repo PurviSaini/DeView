@@ -25,7 +25,7 @@ function App() {
     <>
     {/* <Login/> */}
     {/* <Team /> */}
-    <Task/>
+    <Task />
       {/* <h1> Hello this is frontend!! </h1>
         <p>Fruits: {fruits.length} </p>
       {

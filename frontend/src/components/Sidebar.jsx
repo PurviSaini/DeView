@@ -1,7 +1,7 @@
 import './Sidebar.css'
 export default function Sidebar(){
     return (
-        <div id="sidebar" className="col">
+        <div id="sidebar" className="col p-4">
             <a href='/' className="row">Tasks</a>
             <a href='/' className="row">Ideator</a>
             <a href='/' className="row">Docs</a>

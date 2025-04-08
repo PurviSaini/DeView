@@ -2,6 +2,7 @@ nav{
     background-color: #555555;
     padding: 1px;
     text-align: center;
+    top: 0;
 }
 nav> p{
     background-color: #555555;

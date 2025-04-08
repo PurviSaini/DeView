@@ -2,7 +2,7 @@ import './Navbar.css'
 
 export default function Navbar(){
     return (
-        <nav>
+        <nav className='sticky-top'>
             <p>DeView</p>
         </nav>
     )
