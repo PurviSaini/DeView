@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 import Login from './components/Login'
 import Register from './components/Register'
 import Team from './pages/Team'
+import Sidebar from './components/Sidebar'
+import Task from './pages/Task'
 import './App.css'
 import axios from 'axios'
 
@@ -22,7 +24,8 @@ function App() {
   return (
     <>
     {/* <Login/> */}
-    <Team />
+    {/* <Team /> */}
+    <Task/>
       {/* <h1> Hello this is frontend!! </h1>
         <p>Fruits: {fruits.length} </p>
       {
