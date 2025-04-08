@@ -1,18 +1,42 @@
+body {
+font-family: "Poppins", sans-serif;
+  background-color: #010409;
+  color: white;
+}
+
 div.task-container{
     padding: 1rem;
     margin-left: 7rem;
     text-align: center;
 }
-ul{
-    list-style:none;
-}
 
-li{
-    background-color: rgb(31, 30, 30);
-    border: 1px solid grey;
-    border-radius: 5px;
+.form-bg-gradient {
+    background: radial-gradient(circle, #2e3137, #89858d);
+  }
+  
+  .table-bg-gradient {
+    background: linear-gradient(to right, #6f42c1, #20c997);
+  }
 
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-    padding:1rem
-}
+  .form-bg-gradient > * {
+    background: none;
+  }
+
+  .border-violet {
+    border: 4px solid rgb(172, 101, 238);
+    border-radius: 12px;
+  }
+
+  /* .no-bg {
+    background: none;
+  } */
+
+  .white-text {
+    color: white;
+  }
+
+  .modal-bg-dark {
+    background-color: #2e3137;
+    color: white;
+    border: 2px solid #6f42c1;
+  }

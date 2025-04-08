@@ -1,14 +1,16 @@
 div#sidebar{
     float: left;
-    background-color: grey;
-    padding: 10px;
+    background-color: #ccd2dc;
+    padding: 10px; 
     /* height:47vmax; */
-    height: 87vh; 
+    height: 100vh;
+    position:fixed; 
     overflow-y:auto;
 }
 
 a.row{
-    background-color: grey;
+    background-color: #ccd2dc;
+    color: black;
     display: block;
     text-decoration: none;
     padding: 0.5rem;
@@ -22,5 +24,10 @@ a.row{
 
 a.row:hover{
     background-color: rgb(97, 97, 97);
+    color: white;
     border-radius: 7px;
+}
+
+a.row:first-child {
+    padding-top: 25%;
 }

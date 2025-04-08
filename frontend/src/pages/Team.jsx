@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-// import { Container, Row, Col, Button, Form, Card, Alert } from 'react-bootstrap';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Row, Col, Button, Form, Card, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './Team.css'; 
 import team2 from "../assets/team2.png";
 import jointeam from '../assets/jointeam.png';
@@ -46,7 +46,7 @@ const Team = () => {
                 </center>
                 <Row className="justify-content-center text-center mt-5 vh-100">
                     <Col md={8} lg={6} >
-                        <Card className="neon-box p-4 dark-card">
+                        <Card className="neon-box p-4 dark-card bg-dark">
                             <p className="text-white">Want to start a team?</p>
                             <Button variant="outline-light btn-primary" onClick={handleCreateTeam}>
                                 Create your team
@@ -70,8 +70,8 @@ const Team = () => {
                     </div>
                 </Col>
                 <Col xs={12} md={6}>
-                    <Card className="neon-box p-4 dark-card">
-                        <center className='black-bg'><p className="text-white black-bg">Join a team with <span className='color-pink'>code</span>.</p></center>
+                    <Card className="neon-box p-4 dark-card bg-dark">
+                        <center><p className="text-white">Join a team with <span className='color-pink'>code</span>.</p></center>
                         <Form onSubmit={handleJoinTeam} className='m-0 p-0 border-0 form-join'>
                             <Form.Group controlId="formTeamCode">
                                 <Form.Control

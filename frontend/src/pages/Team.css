@@ -1,9 +1,9 @@
 
-.dark-page {
+/* .dark-page {
     background-color: #010409;
     min-height: 100vh;
     color: white;
-  }
+  } */
   
   .dark-card {
     background-color: #161b22;
@@ -11,9 +11,9 @@
     border-radius: 1rem;
   }
 
-  .dark-card > p, span {
+  /* .dark-card > p, span {
     background-color: #161b22;
-  }
+  } */
   
   .dark-input {
     background-color: #0d1117;
@@ -65,9 +65,9 @@
     justify-content: center;
   }
   
-  .form-join {
+  /* .form-join {
     background-color: #161b22;
-  }
+  } */
 
   .black-bg {
     background-color: #161b22;
