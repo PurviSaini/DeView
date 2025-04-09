@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Login from './components/Login'
 import Register from './components/Register'
-import Team from './pages/team'
+import Team from './pages/Team'
 import Ideator from './pages/Ideator'
 import Sidebar from './components/Sidebar'
 import Task from './pages/Task'
