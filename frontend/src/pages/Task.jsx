@@ -53,11 +53,11 @@ export default function Task(){
         dueDate: "",
         assignedTo: "",
         priority: "",
-        description: "",
+        desc: "",
     });
 
-    const priorityOptions = ["High", "Medium", "Low"];
-    const statusOptions = ["To Do", "Ongoing", "Completed"];
+    const priorityOptions = ["low", "med", "high"];
+    const statusOptions =  ["to do", "in progress", "completed"];
 
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -70,7 +70,6 @@ export default function Task(){
         e.preventDefault();
         const newTask = {
             ...formData,
-            status: "To Do", // default status
         };
         console.log(newTask);
         try {
@@ -84,7 +83,7 @@ export default function Task(){
                 dueDate:"",
                 assignedTo:"",
                 priority:"",
-                description:"",
+                desc:"",
             });
             alert("Task added successfully!");
         } catch (err) {
@@ -107,7 +106,7 @@ export default function Task(){
                     withCredentials: true,
                   }
             );
-            console.log(`Task ${taskId} field '${field}' updated to '${value}'`);
+            // console.log(`Task ${taskId} field '${field}' updated to '${value}'`);
         } catch (err) {
             alert("Failed to update task field");
             console.error(err);
@@ -212,9 +211,9 @@ export default function Task(){
                                     <Form.Control
                                         as="textarea"
                                         rows={3}
-                                        name="description"
+                                        name="desc"
                                         className="dark-input"
-                                        value={formData.description}
+                                        value={formData.desc}
                                         onChange={handleChange}
                                     />
                                 </Form.Group>
@@ -326,7 +325,7 @@ export default function Task(){
                             </Modal.Header>
                             <Modal.Body className="modal-bg-dark">
                                 <p><strong>Description:</strong></p>
-                                <p>{selectedTask.description || "No description provided."}</p>
+                                <p>{selectedTask.desc || "No description provided."}</p>
                                 <p><strong>Title:</strong> {selectedTask.title}</p>
                                 <p><strong>Due Date:</strong> {selectedTask.dueDate}</p>
                                 <p><strong>Assigned To:</strong> {selectedTask.assignedTo}</p>
