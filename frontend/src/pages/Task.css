@@ -41,3 +41,9 @@ div.task-container{
     color: white;
     border: 1px solid rgb(172, 101, 238, 0.5);
   }
+
+  .dark-input {
+    background-color: #242525;
+    color: white;
+    border: 1px solid #aeb0b2;
+  }
