@@ -10,7 +10,6 @@ const teamSchema = new mongoose.Schema({
     },
     gitRepoUrl: {
         type: String,
-        unique: true
     }
 });
 
