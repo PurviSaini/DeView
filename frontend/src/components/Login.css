@@ -5,11 +5,25 @@
     background-color: #010409;
     color: white;
 } */
+
+p.header{
+    text-align: center;
+    margin-top: 6vh;
+}
+
+p.header > h2{
+    background: linear-gradient(to right, rgb(2, 141, 255), rgb(1, 231, 1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+/* p.header > i{
+    color:rgb(190, 4, 103);
+} */
 form{
-    margin:19vh 250px;
+    margin:7vh 23vw;
     border: 2px solid #898787;
     border-radius: 15px;
-    padding: 10px 173px;
+    padding: 20px 173px;
     text-align: center;
     background-color: rgba(66, 66, 66, 0.2);
     box-shadow: 0px 0px 105px rgb(54, 54, 54);
@@ -25,14 +39,13 @@ label{
     min-width:120px;
     border-bottom: 1px solid #898787;
     background: transparent;
+    margin-top: 0.6rem;
 }
 input{
-    margin-top: 10px;
-    margin-bottom: 20px;
     width: 23vw;
     height: 35px;
     border-radius: 10px;
-    border-color: white;
+    border-color: rgb(188, 224, 248);
     padding:2px 5px;
     background: transparent;
     color: rgb(190, 190, 190);

@@ -35,6 +35,10 @@ export default function Login(){
     };
     return (
         <div>
+            <p className="header">
+                <h2>DeView: Your Project, from Vision to Version</h2>
+                <i>Track tasks, spark ideas, analyze code — all in one place.</i>
+            </p>
             <form className='log_register' action="/">
                 <p id='heading'>Log In</p>
                 {/* input for email */}

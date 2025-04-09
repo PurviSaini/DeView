@@ -33,6 +33,10 @@ export default function Register(){
     }
     return (
         <div>
+            <p className="header">
+                <h2>DeView: Your Project, from Vision to Version</h2>
+                <i>Track tasks, spark ideas, analyze code — all in one place.</i>
+            </p>
             <form>
                 <p id='heading'>Register</p>
                 {/* input for username */}
