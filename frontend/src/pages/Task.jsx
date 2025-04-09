@@ -100,7 +100,7 @@ export default function Task(){
     return (
         <div>
             <Sidebar/>
-            <Navbar/>
+            <Navbar title="Tasks"/>
 
             <div className="task-container">
                 {/* Task Form */}

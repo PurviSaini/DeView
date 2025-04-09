@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar(){
+export default function Navbar({ title }){
     const navigate = useNavigate();
     const handleLogout = async (e)=>{
         e.preventDefault();
@@ -24,7 +24,7 @@ export default function Navbar(){
 
     return (
         <nav className='sticky-top'>
-            <span>DeView</span>
+            <span>{ title || "DeView" }</span>
 
 <Dropdown>
       <Dropdown.Toggle variant="primary" className="no-arrow">
