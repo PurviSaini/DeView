@@ -12,9 +12,19 @@ export default function Task(){
     const [teamMembers, setTeamMembers] = useState([]);
 
   useEffect(() => {
+    const fetchTasks = async () => {
+        try {
+          const res = await axios.get(import.meta.env.VITE_BACKEND_URL+ "/tasks", {
+            withCredentials: true,
+          });
+          setTasks(res.data.tasks || []);
+        } catch (err) {
+          console.error("Failed to fetch tasks", err);
+        }
+      };
     const fetchTeamMembers = async () => {
       try {
-        const res = await axios.get(import.meta.env.VITE_BACKEND_URL+"/team", {
+        const res = await axios.get(import.meta.env.VITE_BACKEND_URL+ "/team", {
           withCredentials: true, 
         });
         setTeamMembers(res.data.members || []);
@@ -24,6 +34,7 @@ export default function Task(){
     };
 
     fetchTeamMembers();
+    fetchTasks();
   }, []);
 
     const handleShowDetails = (task) => {
@@ -62,7 +73,9 @@ export default function Task(){
             status: "To Do", // default status
         };
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/tasks`, newTask);
+            const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/tasks", newTask,{
+                withCredentials: true,
+              });
 
             setTasks((prev) => [...prev, res.data.task || newTask]);
             setFormData({
@@ -88,8 +101,10 @@ export default function Task(){
 
         try {
             await axios.patch(
-                `${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`,
-                { [field]: value }
+                import.meta.env.VITE_BACKEND_URL+ "/tasks" + `/${taskId}`,
+                { [field]: value },{
+                    withCredentials: true,
+                  }
             );
             console.log(`Task ${taskId} field '${field}' updated to '${value}'`);
         } catch (err) {
@@ -98,9 +113,19 @@ export default function Task(){
         }
     };
 
-    const handleDeleteTask = (index) => {
-        setTasks(updatedTasks);
-    };
+    const handleDeleteTask = async (index) => {
+        const taskId = tasks[index]._id;
+        try {
+          await axios.delete(import.meta.env.VITE_BACKEND_URL+ "/tasks" + `/${taskId}`,{
+            withCredentials: true,
+          });
+          const updatedTasks = tasks.filter((_, i) => i !== index);
+          setTasks(updatedTasks);
+        } catch (err) {
+          console.error("Failed to delete task", err);
+          alert("Error deleting task");
+        }
+      };
 
     return (
         <div>

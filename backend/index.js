@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./src/config/database');
 const User = require('./src/models/User');
 const Team = require('./src/models/Team');
+const Task = require('./src/models/Task');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -136,6 +137,62 @@ app.get('/team', userAuth, async (req, res) => {
   } catch (err) {
     console.error('Error fetching team info:', err);
     res.status(500).send({ message: 'Failed to fetch team info' });
+  }
+});
+
+//get the tasks
+app.get("/tasks", userAuth, async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json({ tasks });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch tasks" });
+  }
+});
+
+// POST new task
+app.post("/tasks",userAuth, async (req, res) => {
+  try {
+    const { teamCode, title, desc, assignedTo, priority, status, dueDate } = req.body;
+
+    const task = new Task({
+      teamCode,
+      title,
+      desc,
+      assignedTo,
+      priority: priority || "med",
+      status: status || "to do",
+      dueDate
+    });
+
+    await task.save();
+    res.status(201).json({ task });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: "Failed to create task" });
+  }
+});
+
+// PATCH update task field
+app.patch("/tasks/:id", userAuth, async (req, res) => {
+  try {
+    const updated = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updated) return res.status(404).json({ error: "Task not found" });
+    res.json({ task: updated });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: "Failed to update task" });
+  }
+});
+
+// DELETE task
+app.delete("/tasks/:id", userAuth, async (req, res) => {
+  try {
+    const deleted = await Task.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "Task not found" });
+    res.json({ message: "Task deleted", task: deleted });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete task" });
   }
 });
 
