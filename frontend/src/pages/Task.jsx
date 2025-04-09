@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from 'axios';
 import { Form, Button, Card, Row, Col, Table, Modal } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,6 +9,22 @@ import './Task.css'
 export default function Task(){
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [teamMembers, setTeamMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const res = await axios.get(import.meta.env.VITE_BACKEND_URL+"/team", {
+          withCredentials: true, 
+        });
+        setTeamMembers(res.data.members || []);
+      } catch (err) {
+        console.error("Failed to fetch team members", err);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
 
     const handleShowDetails = (task) => {
         setSelectedTask(task);
@@ -29,7 +45,6 @@ export default function Task(){
         description: "",
     });
 
-    const teamMembers = ["Alice", "Bob", "Charlie", "Diana"];
     const priorityOptions = ["High", "Medium", "Low"];
     const statusOptions = ["To Do", "Ongoing", "Completed"];
 

@@ -3,6 +3,7 @@ require("dotenv").config();
 const cors = require('cors');
 const connectDB = require('./src/config/database');
 const User = require('./src/models/User');
+const Team = require('./src/models/Team');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -98,6 +99,16 @@ app.post('/signup', async (req, res) => {
       return res.status(404).send({ message: "User not found" });
     }
     user.teamCode = teamCode;
+    const team = await Team.findOne({ teamCode });
+    if (!team) {
+      // Create a new team if it doesn't exist
+      const newTeam = new Team({ teamCode, members: [user.username] });
+      await newTeam.save();
+    } else {
+      // Add the user to the team 
+      team.members.push(user.username);
+      await team.save();
+    }
     await user.save();
     res.status(200).send({ message: "Team code updated successfully" });
   } catch (err) {
@@ -106,6 +117,27 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+//get the team members
+app.get('/team', userAuth, async (req, res) => {
+  try {
+    const user = req.user; 
+    const teamCode = user.teamCode;
+
+    if (!teamCode) {
+      return res.status(400).send({ message: 'User is not in any team' });
+    }
+
+    const team = await Team.findOne({ teamCode });
+    if (!team) {
+      return res.status(404).send({ message: 'Team not found' });
+    }
+    res.status(200).json({ members: team.members });
+
+  } catch (err) {
+    console.error('Error fetching team info:', err);
+    res.status(500).send({ message: 'Failed to fetch team info' });
+  }
+});
 
 //log out
 app.post('/logout', (req, res) => {
