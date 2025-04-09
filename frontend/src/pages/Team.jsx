@@ -19,14 +19,12 @@ const Team = () => {
             setShowAlert(true);
             return;
         }
-
         try {
-            const response = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/updateUser", {
-                code: teamCode,
-            });
+            const response = await axios.patch(import.meta.env.VITE_BACKEND_URL+ "/user/teamCode", {
+                teamCode: teamCode,
+            },{withCredentials: true});
     
             alert(`Joined team successfully!`);
-            console.log(response.data);
             setShowAlert(false);
             navigate('/task');
         } catch (error) {

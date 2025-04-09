@@ -10,8 +10,9 @@ export default function Navbar(){
         e.preventDefault();
         
         try{
-            const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/logout");
+            const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/logout",{},{withCredentials: true});
             alert(res.data.message);
+            localStorage.removeItem('username');
             navigate("/");
         
        }

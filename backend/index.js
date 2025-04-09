@@ -10,7 +10,12 @@ const jwt = require('jsonwebtoken');
 const {userAuth} = require('./src/middlewares/auth');
 const app = express();
 
-app.use(cors());
+app.use(cors(
+  {
+    origin: ['http://localhost:5173', 'https://de-view.vercel.app'],
+    credentials: true,
+  }
+));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -28,15 +33,6 @@ connectDB().then(()=>{
 
 app.get("/", (req, res) => {
     res.send("Hello this is backend"); 
-});
-
-app.get("/api/fruits", (req, res) => {
-    const fruits = [
-        { id: 1, title: "Apple", content: "This is apple" },
-        { id: 2, title: "Banana", content: "This is banana" },
-        { id: 3, title: "Mango", content: "This is mango" },
-    ];
-    res.send(fruits);
 });
 
 //sign up
@@ -79,21 +75,47 @@ app.post('/signup', async (req, res) => {
       const token = await jwt.sign({_id: user._id}, process.env.JWT_SECRET);
   
       //2. Add the token to cookie and send the reponse back to the user
-      res.cookie('token', token);
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None'
+    });
       
       // req.session.user = user;
-      res.send({ message: "Login successful" });
+      res.send({ message: "Login successful" , teamCode:user.teamCode});
     } catch (error) {
       res.status(500).send({ message: "Failed to login" });
     }
    
   });
 
+  //update team code for a user upon joining a team
+  app.patch('/user/teamCode', userAuth, async (req, res) => {
+  const { teamCode } = req.body;
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    user.teamCode = teamCode;
+    await user.save();
+    res.status(200).send({ message: "Team code updated successfully" });
+  } catch (err) {
+    console.error("Error updating team code:", err);
+    res.status(500).send({ message: "Failed to update team code" });
+  }
+});
+
+
 //log out
 app.post('/logout', (req, res) => {
-    res.clearCookie('token');
-    res.send({ message: "Logout successful" });
+    res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None'
   });
+  res.send({ message: "Logged out successfully" });
+});
   
 
 

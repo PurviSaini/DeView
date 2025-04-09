@@ -17,9 +17,10 @@ export default function Login(){
             const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/login", {
             username: username,
             password: password
-        })
+        },{withCredentials: true});
         alert(res.data.message);
-        const teamCode = "";
+        localStorage.setItem('username', username);
+        const teamCode = res.data.teamCode;
         if(teamCode) {
             navigate('/task');
         } else {
