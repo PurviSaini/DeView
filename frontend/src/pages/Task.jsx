@@ -97,6 +97,11 @@ export default function Task(){
             console.error(err);
         }
     };
+
+    const handleDeleteTask = (index) => {
+        setTasks(updatedTasks);
+    };
+
     return (
         <div>
             <Sidebar/>
@@ -114,6 +119,7 @@ export default function Task(){
                                     <Form.Control
                                         type="text"
                                         name="title"
+                                        className="dark-input"
                                         value={formData.title}
                                         onChange={handleChange}
                                         required
@@ -126,6 +132,7 @@ export default function Task(){
                                     <Form.Control
                                         type="date"
                                         name="dueDate"
+                                        className="dark-input"
                                         value={formData.dueDate}
                                         onChange={handleChange}
                                         required
@@ -137,6 +144,7 @@ export default function Task(){
                                     <Form.Label className="no-bg">Assigned to:</Form.Label>
                                     <Form.Select
                                         name="assignedTo"
+                                        className="dark-input"
                                         value={formData.assignedTo}
                                         onChange={handleChange}
                                         required
@@ -158,6 +166,7 @@ export default function Task(){
                                     <Form.Label>Priority:</Form.Label>
                                     <Form.Select
                                         name="priority"
+                                        className="dark-input"
                                         value={formData.priority}
                                         onChange={handleChange}
                                         required
@@ -178,6 +187,7 @@ export default function Task(){
                                         as="textarea"
                                         rows={3}
                                         name="description"
+                                        className="dark-input"
                                         value={formData.description}
                                         onChange={handleChange}
                                     />
@@ -206,6 +216,7 @@ export default function Task(){
                                     <th>Assigned To</th>
                                     <th>Priority</th>
                                     <th>Status</th>
+                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -261,6 +272,16 @@ export default function Task(){
                                                 </option>
                                             ))}
                                         </Form.Select>
+                                    </td>
+                                    <td>
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            className="rounded-pill calendar-dark"
+                                            onClick={() => handleDeleteTask(index)}
+                                        >
+                                            Delete
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}
