@@ -1,0 +1,13 @@
+/* 0D6EFD
+198754 */
+div.container{
+    margin-left: 11rem;
+}
+
+div#left-container{
+    border: 2px solid #0D6EFD;
+}
+
+div#right-container{
+    border: 2px solid #198754;
+}

@@ -6,6 +6,7 @@ import Ideator from './pages/Ideator'
 import Sidebar from './components/Sidebar'
 import Task from './pages/Task'
 import './App.css'
+import Documentation from './pages/Documentation'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <Route path='/team' element={<Team />}/>
         <Route path='/task' element={<Task />}/>
         <Route path='/ideator' element={<Ideator />} />
+        <Route path='/documentation' element={<Documentation />} />
       </Routes>
     </>
   )
