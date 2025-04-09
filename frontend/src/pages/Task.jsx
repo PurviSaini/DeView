@@ -72,6 +72,7 @@ export default function Task(){
             ...formData,
             status: "To Do", // default status
         };
+        console.log(newTask);
         try {
             const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/tasks", newTask,{
                 withCredentials: true,

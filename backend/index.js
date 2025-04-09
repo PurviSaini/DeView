@@ -159,12 +159,12 @@ app.post("/tasks",userAuth, async (req, res) => {
    
     const task = new Task({
       teamCode: req.user.teamCode,
-      title,
-      desc,
-      assignedTo,
-      priority: priority || "med",
-      status: status || "to do",
-      dueDate
+      title:title,
+      desc:desc,
+      assignedTo:assignedTo,
+      priority: priority,
+      status: status,
+      dueDate: dueDate
     });
 
     await task.save();
