@@ -143,7 +143,9 @@ app.get('/team', userAuth, async (req, res) => {
 //get the tasks
 app.get("/tasks", userAuth, async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const user = req.user;
+    const teamCode = user.teamCode;
+    const tasks = await Task.find({ teamCode });
     res.json({ tasks });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch tasks" });
@@ -153,10 +155,10 @@ app.get("/tasks", userAuth, async (req, res) => {
 // POST new task
 app.post("/tasks",userAuth, async (req, res) => {
   try {
-    const { teamCode, title, desc, assignedTo, priority, status, dueDate } = req.body;
-
+    const { title, desc, assignedTo, priority, status, dueDate } = req.body;
+   
     const task = new Task({
-      teamCode,
+      teamCode: req.user.teamCode,
       title,
       desc,
       assignedTo,
