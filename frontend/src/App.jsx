@@ -3,6 +3,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Team from './pages/Team'
 import Ideator from './pages/Ideator'
+import GitStats from './pages/gitStats'
 import Sidebar from './components/Sidebar'
 import Task from './pages/Task'
 import './App.css'
@@ -24,6 +25,7 @@ function App() {
         <Route path='/task' element={<Task />}/>
         <Route path='/ideator' element={<Ideator />} />
         <Route path='/documentation' element={<Documentation />} />
+        <Route path='/git-stats' element={<GitStats />}/>
       </Routes>
     </>
   )

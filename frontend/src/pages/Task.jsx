@@ -129,9 +129,8 @@ export default function Task(){
 
     return (
         <div>
-            <Sidebar/>
             <Navbar title="Tasks"/>
-
+            <Sidebar/>
             <div className="task-container">
                 {/* Task Form */}
                 <Card className="p-4 m-5 form-bg-gradient text-light border-violet shadow-none" >

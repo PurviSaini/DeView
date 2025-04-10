@@ -26,9 +26,9 @@ a.row:hover{
     border-radius: 7px;
 }
 
-a.row:first-child {
+/* a.row:first-child {
     margin-top: 3.0rem;
-}
+} */
 
 .sidebar-link {
     color: rgb(58, 57, 57);
