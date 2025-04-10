@@ -22,6 +22,11 @@ export default function Navbar({ title }){
         }
     }
 
+    const handleTeamView = (e) => {
+        e.preventDefault();
+        navigate('/team-profile');
+    }
+
     return (
         <nav className='sticky-top'>
             <span>{ title || "DeView" }</span>
@@ -34,6 +39,7 @@ export default function Navbar({ title }){
       <Dropdown.Menu>
         {/* <Dropdown.Item href="#/action-1">User Profile</Dropdown.Item> */}
         <Dropdown.Item href="#/action-2" onClick={handleLogout}>Log out</Dropdown.Item>
+        <Dropdown.Item href="#" onClick={handleTeamView}>View Team Profile</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
       

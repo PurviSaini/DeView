@@ -6,6 +6,7 @@ import Ideator from './pages/Ideator'
 import GitStats from './pages/GitStats'
 import Resources from './pages/Resources'
 import Analytics from './pages/Analytics'
+import TeamProfile from './pages/TeamProfile'
 import Sidebar from './components/Sidebar'
 import Task from './pages/Task'
 import './App.css'
@@ -30,6 +31,7 @@ function App() {
         <Route path='/git-stats' element={<GitStats />}/>
         <Route path='/resources' element={<Resources />}/>
         <Route path='/analytics' element={<Analytics />}/>
+        <Route path='/team-profile' element={<TeamProfile />}/>
       </Routes>
     </>
   )
