@@ -29,9 +29,10 @@ function App() {
         <Route path='/ideator' element={<Ideator />} />
         <Route path='/documentation' element={<Documentation />} />
         <Route path='/git-stats' element={<GitStats />}/>
-        <Route path='/resources' element={<Resources />}/>
+        {/* <Route path='/resources' element={<Resources />}/> */}
         <Route path='/analytics' element={<Analytics />}/>
         <Route path='/team-profile' element={<TeamProfile />}/>
+        <Route path='/resources' element={<Resources />}/>
       </Routes>
     </>
   )

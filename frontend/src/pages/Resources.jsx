@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
-import axios from 'axios';
-import Navbar from '../components/Navbar';
-import Sidebar from '../components/Sidebar';
-import './Resources.css';
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+import { Container, Row, Col } from 'react-bootstrap';
+import './Resources.css'
 
-const Resources = () => {
+export default function Resources(){
     return (
         <div>
-            <Navbar title="Resource Sharing"/>
-            <Sidebar />
-            <div className="task-container p-3">
-                <h3>Hi this is Resource Sharing page</h3>
+            <Navbar title = "Resources"/>
+            <Sidebar/>
+
+            <div className="resource-container">
+                <Container className="mt-4">
+                    <Row>
+                        <Col>
+                        <div className="p-4 bg-primary text-white text-center mb-3 rounded">Box 1</div>
+                        <div className="p-4 bg-success text-white text-center mb-3 rounded">Box 2</div>
+                        <div className="p-4 bg-warning text-dark text-center rounded">Box 3</div>
+                        </Col>
+                    </Row>
+                </Container>
+                <div id="link-input">
+                    <input type="url" name="resource-link" id="resource-link" /> 
+                    <button id="submit-link"><i class="fa fa-send-o"></i></button>
+                </div>
             </div>
         </div>
-    );
-};
-
-export default Resources
+    )
+}
