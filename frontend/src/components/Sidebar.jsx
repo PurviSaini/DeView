@@ -9,6 +9,7 @@ export default function Sidebar(){
             <NavLink to="/documentation" className="text-decoration-none sidebar-link row">Docs</NavLink>
             <NavLink to="/git-stats" className="text-decoration-none sidebar-link row">Stats</NavLink>
             <NavLink to="/resources" className="text-decoration-none sidebar-link row">Resources</NavLink>
+            <NavLink to="/analytics" className="text-decoration-none sidebar-link row">Analytics</NavLink>
         </div>
     )
 }
