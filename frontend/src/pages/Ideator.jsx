@@ -66,8 +66,8 @@ const Ideator = () => {
   return (
     
     <div>
-        <Sidebar/>
         <Navbar title="Ideator"/>
+        <Sidebar/>
         <div className="task-container p-3">
             <div className='wrapper-div p-1 m-3 ms-5 rounded-4'>
                 <Card className="p-4 bg-dark text-white rounded-4">

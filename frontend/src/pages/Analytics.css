@@ -1,0 +1,11 @@
+body {
+    font-family: "Poppins", sans-serif;
+      background-color: #010409;
+      color: white;
+    }
+    
+div.task-container{
+        padding: 1rem;
+        margin-left: 7rem;
+        align-items: start;
+}
