@@ -1,13 +1,22 @@
-/* 0D6EFD
-198754 */
-div.container{
-    margin-left: 11rem;
+div.doc-container{
+    margin-left: 13.4rem;
 }
 
-div#left-container{
+div.preview-container{
+    color: black;
+    border: 2px solid #05b81d !important;
+    /* box-shadow: 0px 0px 20px rgb(5, 184, 29, 0.6); */
+}
+
+.markdown-editor{
     border: 2px solid #0D6EFD;
+    /* box-shadow: 0px 0px 20px rgb(13, 110, 253, 0.6); */
+    font-size: 14px;
 }
 
-div#right-container{
-    border: 2px solid #198754;
+h3.head{
+    text-align: center;
+    background: linear-gradient(to right, #0d39fd, #1eff00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
