@@ -9,3 +9,12 @@ div.task-container{
         margin-left: 7rem;
         align-items: start;
 }
+
+.text-pink {
+  color: #e1028f;
+}
+
+.stats-bg-gradient {
+  background: linear-gradient(to right, #000000, #737373);
+  color: white;
+}
