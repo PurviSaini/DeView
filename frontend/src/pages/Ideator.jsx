@@ -20,7 +20,7 @@ const Ideator = () => {
     references: [],
     otherReference: ''
   });
-  const [submittedData, setSubmittedData] = useState(null);
+  const [submittedData, setSubmittedData] = useState([]);
 
   const handleCheckboxChange = (e, field) => {
     const { value, checked } = e.target;
@@ -42,7 +42,7 @@ const Ideator = () => {
       // const response = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/user/ideator", formData);
       // console.log('Submitted:', response.data);
   
-      setSubmittedData(formData); // Store form data to display it
+      setSubmittedData(prev => [...prev, formData]); // Store form data to display it
       setFormData({
         theme: '',
         teamSize: '',
@@ -113,14 +113,14 @@ const Ideator = () => {
           <Form.Group className="mb-3">
             <Form.Label>6. Skills</Form.Label><br />
             {['Frontend', 'Backend', 'AI/ML', 'UI/UX', 'Data Science', 'Cloud/DevOps', 'Mobile', 'Other'].map(skill => (
-              <Form.Check inline type="checkbox" label={skill} value={skill} key={skill} onChange={(e) => handleCheckboxChange(e, 'skills')} />
+              <Form.Check inline type="checkbox" label={skill} value={skill} key={skill} checked={formData.skills.includes(skill)} onChange={(e) => handleCheckboxChange(e, 'skills')} />
             ))}
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>7. Complexity</Form.Label><br />
             {['Beginner friendly', 'Intermediate', 'Advanced'].map(level => (
-              <Form.Check inline type="radio" name="complexity" label={level} value={level} key={level} onChange={handleChange} />
+              <Form.Check inline type="radio" name="complexity" label={level} value={level} key={level} checked={formData.complexity === level} onChange={handleChange} />
             ))}
           </Form.Group>
 
@@ -131,23 +131,23 @@ const Ideator = () => {
 
           <Form.Group className="mb-3">
             <Form.Label>9. Deployment</Form.Label><br />
-            <Form.Check inline type="radio" label="Yes" name="deployment" value="Yes" onChange={handleChange} />
-            <Form.Check inline type="radio" label="No" name="deployment" value="No" onChange={handleChange} />
+            <Form.Check inline type="radio" label="Yes" name="deployment" value="Yes" checked={formData.deployment === "Yes"} onChange={handleChange} />
+            <Form.Check inline type="radio" label="No" name="deployment" value="No" checked={formData.deployment === "No"} onChange={handleChange} />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>10. Expected Outputs</Form.Label><br />
             {['Working Prototype', 'GitHub Repo', 'Demo Video', 'Pitch Deck', 'Live Deployment', 'Others'].map(output => (
-              <Form.Check inline type="checkbox" label={output} value={output} key={output} onChange={(e) => handleCheckboxChange(e, 'outputs')} />
+              <Form.Check inline type="checkbox" label={output} value={output} key={output} checked={formData.outputs.includes(output)} onChange={(e) => handleCheckboxChange(e, 'outputs')} />
             ))}
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>11. References</Form.Label><br />
             {['GitHub project links', 'Tutorials', 'API documentation', 'Research papers'].map(ref => (
-              <Form.Check inline type="checkbox" label={ref} value={ref} key={ref} onChange={(e) => handleCheckboxChange(e, 'references')} />
+              <Form.Check inline type="checkbox" label={ref} value={ref} key={ref} checked={formData.references.includes(ref)} onChange={(e) => handleCheckboxChange(e, 'references')} />
             ))}
-            <Form.Check type="checkbox" label="Other" value="Other" onChange={(e) => handleCheckboxChange(e, 'references')} />
+            <Form.Check type="checkbox" label="Other" value="Other" checked={formData.otherReference === "Other"} onChange={(e) => handleCheckboxChange(e, 'references')} />
             <Form.Control className="mt-2 dark-input" placeholder="If other, specify here" name="otherReference" value={formData.otherReference} onChange={handleChange} />
           </Form.Group>
 
@@ -157,24 +157,28 @@ const Ideator = () => {
         </Form>
       </Card>
       </div>
-      {submittedData && (
-        <Card className="p-4 m-5 wrapper-div rounded-4 text-start">
-          <h4 className="text-center mb-3">Submitted Idea Details</h4>
-          <p><strong>Theme:</strong> {submittedData.theme}</p>
-          <p><strong>Team Size:</strong> {submittedData.teamSize}</p>
-          <p><strong>Duration:</strong> {submittedData.duration}</p>
-          <p><strong>Deadline:</strong> {submittedData.deadline}</p>
-          <p><strong>Skills:</strong> {submittedData.skills.join(', ')}</p>
-          <p><strong>Complexity:</strong> {submittedData.complexity}</p>
-          <p><strong>Tech Stack:</strong> {submittedData.techStack}</p>
-          <p><strong>Deployment:</strong> {submittedData.deployment}</p>
-          <p><strong>Outputs:</strong> {submittedData.outputs.join(', ')}</p>
-          <p><strong>References:</strong> {submittedData.references.join(', ')}</p>
-          {submittedData.otherReference && (
-            <p><strong>Other Reference:</strong> {submittedData.otherReference}</p>
-          )}
-      </Card>
-    )}
+      {submittedData.length > 0 && (  //change start
+        <>
+        <h4 className="text-center my-4 text-white">Submitted Ideas</h4>
+        {submittedData.map((data, index) => (
+          <Card key={index} className="p-4 m-5 wrapper-div rounded-4 text-start">
+            <p><strong>Theme:</strong> {data.theme}</p>
+            <p><strong>Team Size:</strong> {data.teamSize}</p>
+            <p><strong>Duration:</strong> {data.duration}</p>
+            <p><strong>Deadline:</strong> {data.deadline}</p>
+            <p><strong>Skills:</strong> {data.skills.join(', ')}</p>
+            <p><strong>Complexity:</strong> {data.complexity}</p>
+            <p><strong>Tech Stack:</strong> {data.techStack}</p>
+            <p><strong>Deployment:</strong> {data.deployment}</p>
+            <p><strong>Outputs:</strong> {data.outputs.join(', ')}</p>
+            <p><strong>References:</strong> {data.references.join(', ')}</p>
+            {data.otherReference && (
+              <p><strong>Other Reference:</strong> {data.otherReference}</p>
+            )}
+          </Card>
+        ))}
+        </>
+      )}
     </div>
 </div>
     
