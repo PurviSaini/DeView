@@ -1,16 +1,21 @@
 div.doc-container{
     margin-left: 13.4rem;
+    padding: 0;
 }
 
 div.preview-container{
-    color: black;
-    border: 2px solid #05b81d !important;
-    /* box-shadow: 0px 0px 20px rgb(5, 184, 29, 0.6); */
+    border: none !important;
+    background: linear-gradient(#38ad51, #005242);
+    border-radius: 10px !important;
+    color: white;
+    min-height: 33.5vh;
 }
 
-.markdown-editor{
-    border: 2px solid #0D6EFD;
-    /* box-shadow: 0px 0px 20px rgb(13, 110, 253, 0.6); */
+.markdown-editor, .markdown-editor:focus{
+    border: 4px solid #38ad51 !important;
+    background-color: #363636;
+    border-radius: 10px;
+    color: white;
     font-size: 14px;
 }
 
