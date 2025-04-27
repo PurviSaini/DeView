@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useEffect,useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, Card, Container, Row, Col, Badge, Button, InputGroup, FormGroup } from 'react-bootstrap';
 import axios from 'axios';
@@ -10,50 +10,48 @@ const GitStats = () => {
     const [repoUrl, setRepoUrl] = useState('');
     const [stats, setStats] = useState(null);
 
-    const extractRepoInfo = (url) => {
+    const fetchStats = async () => {
         try {
-            const path = new URL(url).pathname.split('/').filter(Boolean);
-            return { owner: path[0], repo: path[1] };
-        } catch {
-            return null;
+            const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/repoStats", {
+                withCredentials: true,
+            });
+            setStats(response.data);
+        } catch (error) {
+            console.error('Error fetching repo stats from backend:', error);
+            alert('Failed to fetch repo stats from backend.');
         }
     };
+    
+    useEffect(() => {
+        const fetchRepoUrlFromDb = async () => {
+            try {
+                const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/repoUrl',{
+                    withCredentials: true,
+                  });
+                if (response.data.gitRepoUrl) {
+                    setRepoUrl(response.data.gitRepoUrl);
+                    fetchStats(); // Fetch stats after setting the repo URL
+                }
+            } catch (error) {
+                console.error('Error fetching repo url from db:', error);
+            }
+        };
 
-    const fetchRepoStats = async () => {
-        const info = extractRepoInfo(repoUrl);
-        if (!info) return alert('Invalid GitHub repo URL');
+        fetchRepoUrlFromDb();
+    }, []);
 
+
+    const handlefetch = async () => {
         try {
-            const [repoRes, commitsRes, prsRes, langsRes, contribRes] = await Promise.all([
-                axios.get(`https://api.github.com/repos/${info.owner}/${info.repo}`),
-                axios.get(`https://api.github.com/repos/${info.owner}/${info.repo}/commits`),
-                axios.get(`https://api.github.com/repos/${info.owner}/${info.repo}/pulls?state=all`),
-                axios.get(`https://api.github.com/repos/${info.owner}/${info.repo}/languages`),
-                axios.get(`https://api.github.com/repos/${info.owner}/${info.repo}/contributors`)
-            ]);
-
-            const openPRs = prsRes.data.filter(pr => pr.state === 'open');
-            const closedPRs = prsRes.data.filter(pr => pr.state === 'closed');
-            const latestCommit = commitsRes.data[0];
-
-            setStats({
-                name: repoRes.data.full_name,
-                commitsCount: repoRes.data.commit_count || commitsRes.data.length,
-                openPRs: openPRs.length,
-                closedPRs: closedPRs.length,
-                latestCommit: {
-                    message: latestCommit.commit.message,
-                    author: latestCommit.commit.author.name
-                },
-                languages: Object.keys(langsRes.data),
-                deployedUrl: repoRes.data.homepage || 'N/A',
-                contributors: contribRes.data.map(c => c.login).slice(0, 5),
-                createdAt: new Date(repoRes.data.created_at).toLocaleDateString(),
-                defaultBranch: repoRes.data.default_branch
-            });
-        } catch (err) {
-            console.error(err);
-            alert('Failed to fetch repo data');
+            const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/repoUrl',{gitRepoUrl:repoUrl},{
+                withCredentials: true,
+              });
+            setRepoUrl(repoUrl);
+            alert("Repo url saved to db");
+            fetchStats(); // Fetch stats after setting the repo URL
+        } catch (error) {
+            console.error('Error saving repo url to db:', error);
+            alert('Failed to save repo url to db.');
         }
     };
     return (
@@ -73,7 +71,7 @@ const GitStats = () => {
                         value={repoUrl}
                         onChange={(e) => setRepoUrl(e.target.value)}
                     />
-                    <Button variant="info" onClick={fetchRepoStats}>
+                    <Button variant="info" onClick={handlefetch}>
                         Fetch
                     </Button>
                 </InputGroup>

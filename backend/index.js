@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require('cors');
+const axios = require('axios');
 const connectDB = require('./src/config/database');
 const User = require('./src/models/User');
 const Team = require('./src/models/Team');
@@ -195,6 +196,89 @@ app.delete("/tasks/:id", userAuth, async (req, res) => {
     res.json({ message: "Task deleted", task: deleted });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete task" });
+  }
+});
+
+//post github repo url
+app.post('/repoUrl', userAuth, async (req, res) => {
+  const { gitRepoUrl } = req.body;
+  try {
+    const teamCode = req.user.teamCode;
+    const team = await Team.findOne({ teamCode });
+    if (!team) {
+      return res.status(404).send({ message: 'Team not found' });
+    }
+    team.gitRepoUrl = gitRepoUrl;
+    await team.save();
+    res.status(200).send({ message: "GitHub repo URL saved successfully" });
+  } catch (err) {
+    console.error("Error saving GitHub repo URL:", err);
+    res.status(500).send({ message: "Failed to save GitHub repo URL" });
+  }
+}); 
+
+//get github repo url
+app.get("/repoUrl", userAuth, async (req, res) => {
+  try {
+    const teamCode = req.user.teamCode;
+    const team = await Team.findOne({ teamCode });
+    res.json({ gitRepoUrl: team.gitRepoUrl });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch tasks" });
+  }
+});
+
+//fetch github repo stats
+function extractRepoInfo(url) {
+  try {
+      const path = new URL(url).pathname.split('/').filter(Boolean);
+      return { owner: path[0], repo: path[1] };
+  } catch (err) {
+      return null;
+  }
+}
+app.get('/repoStats',userAuth, async (req, res) => {
+  try {
+    const teamCode = req.user.teamCode;
+    const team = await Team.findOne({ teamCode });
+    const repoUrl = team.gitRepoUrl;
+
+      const { owner, repo } = extractRepoInfo(repoUrl);
+      if (!owner || !repo) return res.status(400).json({ message: 'Invalid repo URL.' });
+
+      const [repoRes, commitsRes, prsRes, langsRes, contribRes] = await Promise.all([
+          axios.get(`https://api.github.com/repos/${owner}/${repo}`),
+          axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`),
+          axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`),
+          axios.get(`https://api.github.com/repos/${owner}/${repo}/languages`),
+          axios.get(`https://api.github.com/repos/${owner}/${repo}/contributors`)
+      ]);
+
+      const openPRs = prsRes.data.filter(pr => pr.state === 'open');
+      const closedPRs = prsRes.data.filter(pr => pr.state === 'closed');
+      const latestCommit = commitsRes.data[0];
+
+      const stats = {
+          name: repoRes.data.full_name,
+          commitsCount: repoRes.data.commit_count || commitsRes.data.length,
+          openPRs: openPRs.length,
+          closedPRs: closedPRs.length,
+          latestCommit: {
+              message: latestCommit.commit.message,
+              author: latestCommit.commit.author.name
+          },
+          languages: Object.keys(langsRes.data),
+          deployedUrl: repoRes.data.homepage || 'N/A',
+          contributors: contribRes.data.map(c => c.login).slice(0, 5),
+          createdAt: new Date(repoRes.data.created_at).toLocaleDateString(),
+          defaultBranch: repoRes.data.default_branch
+      };
+
+      res.json(stats);
+
+  } catch (error) {
+      console.error('Error fetching GitHub repo data:', error);
+      res.status(500).json({ message: 'Failed to fetch repo stats.' });
   }
 });
 
