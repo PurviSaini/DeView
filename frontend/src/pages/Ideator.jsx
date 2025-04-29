@@ -36,7 +36,7 @@ const Ideator = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+  const OPENAI_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
