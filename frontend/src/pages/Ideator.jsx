@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Col, Row, Container, Card } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import './Ideator.css';
@@ -35,14 +36,60 @@ const Ideator = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     try {
       // const response = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/user/ideator", formData);
       // console.log('Submitted:', response.data);
+
+      const prompt = `
+      You are an AI project ideator. Based on the following details, suggest a creative software project idea:
+      - Theme: ${formData.theme}
+      - Team Size: ${formData.teamSize}
+      - Duration: ${formData.duration}
+      - Deadline: ${formData.deadline}
+      - Skills: ${formData.skills.join(', ')}
+      - Complexity: ${formData.complexity}
+      - Tech Stack: ${formData.techStack}
+      - Deployment required: ${formData.deployment}
+      - Outputs expected: ${formData.outputs.join(', ')}
+      - References preferred: ${formData.references.join(', ')}
+      - Other References: ${formData.otherReference}
+    
+      Please suggest one innovative project idea stating the problem statement, the solution, tech stack to be used, modules in the project and step by step process for the project with appropriate formatting like giving the heading in bold and capital and add appropriate emojis too.
+      `;
+
+      console.log('API KEY: ', OPENAI_API_KEY);
+    
+      const openAiRes = await axios.post(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+            "HTTP-Referer": `${import.meta.env.VITE_BACKEND_URL}`,
+            "X-Title": "DeView-Ideator"
+          }
+        }
+      );
+    
+      const generatedIdea = openAiRes.data.choices[0].message.content;
+      console.log(openAiRes.data);
+    
+      const combinedData = {
+        ...formData,
+        generatedIdea
+      };
   
-      setSubmittedData(prev => [...prev, formData]); // Store form data to display it
+      setSubmittedData(prev => [...prev, combinedData]);
       setFormData({
         theme: '',
         teamSize: '',
@@ -56,9 +103,9 @@ const Ideator = () => {
         references: [],
         otherReference: '',
       });      
-      // Optionally reset formData here if needed
     } catch (error) {
       console.error('Error:', error);
+      alert('Failed to submit or generate idea.')
     }
   };
   
@@ -162,7 +209,7 @@ const Ideator = () => {
         <h4 className="text-center my-4 text-white">Submitted Ideas</h4>
         {submittedData.map((data, index) => (
           <Card key={index} className="p-4 m-5 wrapper-div rounded-4 text-start">
-            <p><strong>Theme:</strong> {data.theme}</p>
+            {/* <p><strong>Theme:</strong> {data.theme}</p>
             <p><strong>Team Size:</strong> {data.teamSize}</p>
             <p><strong>Duration:</strong> {data.duration}</p>
             <p><strong>Deadline:</strong> {data.deadline}</p>
@@ -174,6 +221,12 @@ const Ideator = () => {
             <p><strong>References:</strong> {data.references.join(', ')}</p>
             {data.otherReference && (
               <p><strong>Other Reference:</strong> {data.otherReference}</p>
+            )} */}
+            {data.generatedIdea && (
+              <p className='generated-idea'>
+                <strong>Generated Project Idea:</strong> <br /> 
+                <ReactMarkdown>{data.generatedIdea}</ReactMarkdown>
+              </p>
             )}
           </Card>
         ))}
