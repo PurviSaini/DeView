@@ -6,6 +6,7 @@ const connectDB = require('./src/config/database');
 const User = require('./src/models/User');
 const Team = require('./src/models/Team');
 const Task = require('./src/models/Task');
+const Idea = require('./src/models/Ideas');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -279,6 +280,68 @@ app.get('/repoStats',userAuth, async (req, res) => {
   } catch (error) {
       console.error('Error fetching GitHub repo data:', error);
       res.status(500).json({ message: 'Failed to fetch repo stats.' });
+  }
+});
+
+//generate ideas and save ideas
+app.post('/idea', userAuth, async (req, res) => {
+  let formData = req.body;
+  const prompt = `
+You are an AI project ideator. Based on the following details, suggest a creative software project idea:
+- Theme: ${formData.theme}
+- Team Size: ${formData.teamSize}
+- Duration: ${formData.duration}
+- Deadline: ${formData.deadline}
+- Skills: ${formData.skills.join(', ')}
+- Complexity: ${formData.complexity}
+- Tech Stack: ${formData.techStack}
+- Deployment required: ${formData.deployment}
+- Outputs expected: ${formData.outputs.join(', ')}
+- References preferred: ${formData.references.join(', ')}
+- Other References: ${formData.otherReference}
+
+Please suggest one innovative project idea stating the problem statement, the solution, tech stack to be used, modules in the project and step by step process for the project according to deadline for every week, link some references to find more about this idea, already existings website on provided idea with appropriate formatting and emojis like giving the heading in bold and capital.
+`;
+
+  try {
+    const response = await axios.post(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+          "HTTP-Referer": "http://de-view.vercel.app",
+          "X-Title": "DeView-Ideator"
+        }
+      }
+    );
+    formData["teamCode"] = req.user.teamCode;
+    const generatedIdea = response.data.choices[0].message.content;
+    formData["generatedIdea"] = generatedIdea;
+    const newIdea = new Idea(formData);
+
+    await newIdea.save();
+    res.json(newIdea);
+
+  } catch (error) {
+    console.error('Error generating or saving idea:', error.message);
+    res.status(500).json({ error: 'Failed to generate or save idea' })
+  }
+});
+
+//fetch ideas
+app.get('/ideas', userAuth, async (req, res) => {
+  const { teamCode } = req.user;
+  try {
+    const ideas = await Idea.find({ teamCode });
+    res.json(ideas);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch ideas' });
   }
 });
 
