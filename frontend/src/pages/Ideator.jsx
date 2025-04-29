@@ -75,7 +75,7 @@ const Ideator = () => {
           headers: {
             Authorization: `Bearer ${OPENAI_API_KEY}`,
             'Content-Type': 'application/json',
-            "HTTP-Referer": `${import.meta.env.VITE_BACKEND_URL}`,
+            "HTTP-Referer": "http://de-view.vercel.app",
             "X-Title": "DeView-Ideator"
           }
         }
