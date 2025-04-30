@@ -60,9 +60,7 @@ const GitStats = () => {
             <Sidebar />
             <div className="task-container p-3">
                 {stats && (
-                    <>
                     <h1 className="text-center text-white display-4 mb-4 project-title">{stats.name}</h1>
-                    </>
                 )}
                 <Container className='m-5 p-4 bg-dark text-start'>
                 <InputGroup className='mb-4'>
