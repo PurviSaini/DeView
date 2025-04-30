@@ -3,6 +3,7 @@ import { Form, Button, Col, Row, Container, Card } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import { FaTrash } from 'react-icons/fa'
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import './Ideator.css';
@@ -61,7 +62,7 @@ const Ideator = () => {
         generatedIdea
       };
   
-      setSubmittedData(prev => [...prev, combinedData]);
+      setSubmittedData(prev => [combinedData, ...prev]);
       // Reset form
       setFormData({
         theme: '',
@@ -81,6 +82,10 @@ const Ideator = () => {
       alert('Failed to submit or generate idea.');
     }
   };
+
+  const handleDeleteIdea = (indexToDelete) => {
+    setSubmittedData(prev => prev.filter((_, index) => index !== indexToDelete));
+  };  
   
 
   return (
@@ -183,10 +188,21 @@ const Ideator = () => {
         {submittedData.map((data, index) => (
           <Card key={index} className="p-4 m-5 wrapper-div rounded-4 text-start">
             {data.generatedIdea && (
-              <p className='generated-idea'>
-                <strong>Generated Project Idea:</strong> <br /> 
-                <ReactMarkdown>{data.generatedIdea}</ReactMarkdown>
-              </p>
+              <div className="d-flex justify-content-between align-items-start">
+                <p className='generated-idea mb-2'>
+                  <strong>Generated Project Idea:</strong><br />
+                  <ReactMarkdown>{data.generatedIdea}</ReactMarkdown>
+                </p>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeleteIdea(index)}
+                  className="ms-3"
+                  title="Delete Idea"
+                >
+                  <FaTrash />
+                </Button>
+              </div>
             )}
           </Card>
         ))}
