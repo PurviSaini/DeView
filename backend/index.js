@@ -266,7 +266,7 @@ app.get('/repoStats',userAuth, async (req, res) => {
       const [repoRes, commitsRes, allPRs, langsRes, contribRes] = await Promise.all([
           axios.get(`https://api.github.com/repos/${owner}/${repo}`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`),
-          fetchAllPRs(`https://api.github.com/repos/${info.owner}/${info.repo}/pulls?state=all`),
+          fetchAllPRs(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/languages`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/contributors`)
       ]);
