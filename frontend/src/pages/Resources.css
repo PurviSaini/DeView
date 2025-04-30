@@ -15,6 +15,26 @@
   margin-top: 2rem;
 }
 
+div.sender-name{
+  font-size: 10px;
+  font-family:cursive;
+  color: green;
+}
+
+.btn-delete-resource{
+  margin: 5px;
+  padding: 0px 2.5px;
+  border-radius: 5px;
+  /* padding: 0;
+  background:none;
+  border: none;
+  color: #DC3545; */
+}
+.btn-delete-resource:hover{
+  background:none;
+  color: #DC3545;
+}
+
 .resource-form{
   width: 100%;
   margin-left: 0;
