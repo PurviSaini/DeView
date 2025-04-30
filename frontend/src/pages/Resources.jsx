@@ -21,18 +21,13 @@ export default function Resources(){
   const handleSend = () => {
     if (input.trim() !== '') {
       setMessages([...messages, input]);
-      setInput('');
+      // setInput('');
     }
   };
-//   const getRandomColor = () => {
-//     const letters = '0123456789ABCDEF';
-//     let color = '#';
-//     for (let i = 0; i < 6; i++) {
-//       color += letters[Math.floor(Math.random() * 16)];
-//     }
-//     return color;
-//   };
-
+  const handleDelete = (index) => {
+    const updatedMessages = messages.filter((_, msgIndex) => msgIndex !== index);
+    setMessages(updatedMessages);
+  };
   return (
     <div>
         <Navbar title = "Resources"/>
@@ -40,12 +35,34 @@ export default function Resources(){
     <Container fluid className="d-flex flex-column p-3 resources-container">
       {/* Message Boxes */}
       <div className="flex-grow-1 overflow-auto mb-3">
-        {messages.map((msg, index) => (
-          <div key={index} style={{ borderColor: getRandomColor()}} className="p-3 mb-2 bg-light rounded shadow-sm resource-box">
-            {msg}
-          </div>
-        ))}
+  {messages.map((msg, index) => (
+    <div 
+      key={index} 
+      style={{ borderColor: getRandomColor() }} 
+      className="p-3 mb-2 bg-light rounded shadow-sm resource-box position-relative"
+    >
+      {/* Sender Name */}
+      <div 
+        className="position-absolute top-0 start-0 p-2 sender-name"
+      >
+        Sender {/* Replace with actual sender name */}
       </div>
+
+      {/* Delete Button */}
+      <button 
+        className="position-absolute top-0 end-0 btn btn-sm btn-danger btn-delete-resource" 
+        onClick={() => handleDelete(index)}
+      >
+        <i class="fa fa-trash-o"></i>
+      </button>
+
+      {/* Message Content */}
+      <div className="mt-4">
+        {msg}
+      </div>
+    </div>
+  ))}
+</div>
 
       {/* Input and Send Button */}
       <Form className="resource-form">
@@ -56,7 +73,12 @@ export default function Resources(){
               placeholder="Type your message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();  // Prevent form submission
+                  handleSend();        // Call your handleSend function
+                }
+              }}
               className="input-resource"
             />
           </Col>
