@@ -59,6 +59,11 @@ const GitStats = () => {
             <Navbar title="Github Stats"/>
             <Sidebar />
             <div className="task-container p-3">
+                {stats && (
+                    <>
+                    <h1 className="text-center text-white display-4 mb-4"><strong>{stats.name}</strong></h1>
+                    </>
+                )}
                 <Container className='mt-5 p-4 bg-dark text-start'>
                 <InputGroup className='mb-4'>
                     <InputGroup.Text className='bg-black text-pink'>
@@ -77,27 +82,54 @@ const GitStats = () => {
                 </InputGroup>
 
                 {stats && (
-                    <Card className="p-4 stats-bg-gradient">
-                        <h5><strong>{stats.name}</strong></h5>
-                        <Row className="mb-3">
-                            <Col><strong>PR:</strong> ✅ {stats.openPRs} ❎ {stats.closedPRs}</Col>
-                            <Col><strong>Commits:</strong> {stats.commitsCount}</Col>
-                            <Col>
-                                {stats.languages.map(lang => (
-                                    <Badge bg="info" text="dark" className="me-1" key={lang}>{lang}</Badge>
-                                ))}
+                    <Card className="p-4 stats-bg-gradient text-white">
+                        <Row className="mb-4">
+                            <Col md={6}>
+                                <h5>📊 Pull Requests</h5>
+                                <p>✅ Open: {stats.openPRs} | ❎ Closed: {stats.closedPRs}</p>
+                            </Col>
+                            <Col md={6}>
+                                <h5>🚀 Total Commits</h5>
+                                <p>{stats.commitsCount}</p>
                             </Col>
                         </Row>
-
-                        <Row className="mb-3">
-                            <Col><strong>Latest Commit</strong><br />Title: {stats.latestCommit.message}<br />By: {stats.latestCommit.author}</Col>
-                            <Col><strong>About:</strong> {stats.deployedUrl}</Col>
+          
+                        <Row className="mb-4">
+                            <Col md={6}>
+                                <h5>🔁 Latest Commit</h5>
+                                <p><strong>Title:</strong> {stats.latestCommit.message}</p>
+                                <p><strong>By:</strong> {stats.latestCommit.author}</p>
+                            </Col>
+                            <Col md={6}>
+                                <h5>🌐 Deployed URL</h5>
+                                <p>{stats.deployedUrl}</p>
+                            </Col>
                         </Row>
-
-                        <Row className='mb-3'>
-                            <Col><strong>Contributors:</strong> {stats.contributors.join(', ')}</Col>
-                            <Col><strong>Created At:</strong> {stats.createdAt}</Col>
-                            <Col><strong>Default Branch:</strong> {stats.defaultBranch}</Col>
+          
+                        <Row className="mb-4">
+                            <Col md={6}>
+                                <h5>🛠️ Languages</h5>
+                                <div>
+                                    {stats.languages.map(lang => (
+                                        <Badge bg="info" text="dark" className="me-2 mb-1" key={lang}>{lang}</Badge>
+                                    ))}
+                                </div>
+                            </Col>
+                            <Col md={6}>
+                                <h5>👥 Top Contributors</h5>
+                                <p>{stats.contributors.join(', ')}</p>
+                            </Col>
+                        </Row>
+          
+                        <Row>
+                            <Col md={6}>
+                                <h5>🌿 Default Branch</h5>
+                                <p>{stats.defaultBranch}</p>
+                            </Col>
+                            <Col md={6}>
+                                <h5>📅 Created On</h5>
+                                <p>{stats.createdAt}</p>
+                            </Col>
                         </Row>
                     </Card>
                 )}

@@ -261,7 +261,7 @@ app.get('/repoStats',userAuth, async (req, res) => {
 
       const stats = {
           name: repoRes.data.full_name,
-          commitsCount: repoRes.data.commit_count || commitsRes.data.length,
+          commitsCount: contribRes.data.reduce((sum, c) => sum + c.contributions, 0),
           openPRs: openPRs.length,
           closedPRs: closedPRs.length,
           latestCommit: {
