@@ -17,6 +17,11 @@ What does the project does?
 ### How we built it
 WHat tech stack is used to built the project?`);
 
+  const handleSave = () => {
+    // Handle save logic here
+    console.log("Markdown saved:", markdown);
+  };
+
   return (
     <div>
       <Navbar title="Documentation" />
@@ -25,6 +30,7 @@ WHat tech stack is used to built the project?`);
         <div className="row">
           <div className="col-md-6 mb-3">
             <h3 className="mb-3 head">Markdown Editor</h3>
+
             <TextareaAutosize
               className="form-control markdown-editor"
               minRows={10}
@@ -32,6 +38,15 @@ WHat tech stack is used to built the project?`);
               onChange={(e) => setMarkdown(e.target.value)}
               placeholder="Write here..."
             />
+            {/* Save Button */}
+            <div className="d-flex justify-content-center mb-2">
+              <button
+                className="btn btn-success btn-sm btn-save-markdown"
+                onClick={handleSave}
+              >
+                Save changes
+              </button>
+            </div>
           </div>
           <div className="col-md-6">
             <h3 className="mb-3 head">Preview</h3>
