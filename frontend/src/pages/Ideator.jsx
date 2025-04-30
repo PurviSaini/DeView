@@ -36,6 +36,7 @@ const Ideator = () => {
     };
   
     fetchIdeas();
+    setSubmittedData(res.data.reverse());
   }, []);
 
   const handleCheckboxChange = (e, field) => {
