@@ -59,7 +59,8 @@ const Ideator = () => {
   
       const combinedData = {
         ...formData,
-        generatedIdea
+        generatedIdea,
+        _id: response.data._id // Assuming the backend returns the ID of the created idea
       };
   
       setSubmittedData(prev => [combinedData, ...prev]);
@@ -83,9 +84,18 @@ const Ideator = () => {
     }
   };
 
-  const handleDeleteIdea = (indexToDelete) => {
-    setSubmittedData(prev => prev.filter((_, index) => index !== indexToDelete));
-  };  
+  const handleDeleteIdea = async (indexToDelete, ideaId) => {
+    if(confirm("Are you sure you want to delete this idea?")){
+    try {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/idea/${ideaId}`, { withCredentials: true });
+      setSubmittedData(prev => prev.filter((_, index) => index !== indexToDelete));
+      alert('Idea deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting idea from DB:', error);
+      alert('Failed to delete idea.');
+    }
+  }
+  }; 
   
 
   return (
@@ -184,9 +194,12 @@ const Ideator = () => {
       </div>
       {submittedData.length > 0 && (  //change start
         <>
+        
         <h4 className="text-center my-4 text-white">Submitted Ideas</h4>
+        
         {submittedData.map((data, index) => (
-          <Card key={index} className="p-4 m-5 wrapper-div rounded-4 text-start">
+          
+          <Card key={data._id || index} className="p-4 m-5 wrapper-div rounded-4 text-start">
             {data.generatedIdea && (
               <div className="d-flex justify-content-between align-items-start">
                 <p className='generated-idea mb-2'>
@@ -194,9 +207,9 @@ const Ideator = () => {
                   <ReactMarkdown>{data.generatedIdea}</ReactMarkdown>
                 </p>
                 <Button
-                  variant="danger"
+                  variant="danger" 
                   size="sm"
-                  onClick={() => handleDeleteIdea(index)}
+                  onClick={() => handleDeleteIdea(index, data._id)}
                   className="ms-3"
                   title="Delete Idea"
                 >

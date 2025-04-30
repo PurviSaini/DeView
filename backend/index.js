@@ -361,6 +361,17 @@ app.get('/ideas', userAuth, async (req, res) => {
   }
 });
 
+//delete an idea
+app.delete('/idea/:id', async (req, res) => {
+  try {
+    const deletedIdea = await Idea.findByIdAndDelete(req.params.id);
+    if (!deletedIdea) return res.status(404).send('Idea not found');
+    res.status(200).json({ message: 'Idea deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting idea:', error);
+    res.status(500).send('Server error');
+  }
+});
 //log out
 app.post('/logout', (req, res) => {
     res.clearCookie("token", {

@@ -114,16 +114,18 @@ export default function Task(){
     };
 
     const handleDeleteTask = async (index) => {
-        const taskId = tasks[index]._id;
-        try {
-          await axios.delete(import.meta.env.VITE_BACKEND_URL+ "/tasks" + `/${taskId}`,{
-            withCredentials: true,
-          });
-          const updatedTasks = tasks.filter((_, i) => i !== index);
-          setTasks(updatedTasks);
-        } catch (err) {
-          console.error("Failed to delete task", err);
-          alert("Error deleting task");
+        if(confirm("Are you sure you want to delete this task?")){
+            const taskId = tasks[index]._id;
+            try {
+            await axios.delete(import.meta.env.VITE_BACKEND_URL+ "/tasks" + `/${taskId}`,{
+                withCredentials: true,
+            });
+            const updatedTasks = tasks.filter((_, i) => i !== index);
+            setTasks(updatedTasks);
+            } catch (err) {
+            console.error("Failed to delete task", err);
+            alert("Error deleting task");
+            }
         }
       };
 

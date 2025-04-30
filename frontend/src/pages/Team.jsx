@@ -21,7 +21,7 @@ const Team = () => {
         }
         try {
             const response = await axios.patch(import.meta.env.VITE_BACKEND_URL+ "/user/teamCode", {
-                teamCode: teamCode,
+                teamCode: teamCode.trim(),
             },{withCredentials: true});
     
             alert(`Joined team successfully!`);
