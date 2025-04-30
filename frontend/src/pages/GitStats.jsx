@@ -60,9 +60,9 @@ const GitStats = () => {
             <Sidebar />
             <div className="task-container p-3">
                 {stats && (
-                    <h1 className="text-center text-white display-4 mb-4 project-title">{stats.name}</h1>
+                    <h1 className="text-center text-white display-4 my-4 project-title">{stats.name}</h1>
                 )}
-                <Container className='m-5 p-4 bg-dark text-start'>
+                <Container className='mx-5 p-4 bg-dark text-start'>
                 <InputGroup className='mb-4'>
                     <InputGroup.Text className='bg-black text-pink'>
                         GitHub Repository: 
