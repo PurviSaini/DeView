@@ -29,14 +29,13 @@ const Ideator = () => {
     const fetchIdeas = async () => {
       try {
         const res = await axios.get(import.meta.env.VITE_BACKEND_URL + "/ideas", {withCredentials: true});
-        if (res.data) setSubmittedData(res.data); // now an array of ideas
+        if (res.data) setSubmittedData(res.data.reverse());; // now an array of ideas
       } catch (err) {
         console.log("No saved ideas found for this team.");
       }
     };
   
     fetchIdeas();
-    setSubmittedData(res.data.reverse());
   }, []);
 
   const handleCheckboxChange = (e, field) => {
