@@ -238,6 +238,22 @@ function extractRepoInfo(url) {
       return null;
   }
 }
+
+const fetchAllPRs = async (url) => {
+  let page = 1;
+  let allPRs = [];
+  let fetched;
+
+  do {
+    const res = await axios.get(`${url}&per_page=100&page=${page}`);
+    fetched = res.data;
+    allPRs = allPRs.concat(fetched);
+    page++;
+  } while (fetched.length === 100);
+
+  return allPRs;
+};
+
 app.get('/repoStats',userAuth, async (req, res) => {
   try {
     const teamCode = req.user.teamCode;
@@ -247,16 +263,16 @@ app.get('/repoStats',userAuth, async (req, res) => {
       const { owner, repo } = extractRepoInfo(repoUrl);
       if (!owner || !repo) return res.status(400).json({ message: 'Invalid repo URL.' });
 
-      const [repoRes, commitsRes, prsRes, langsRes, contribRes] = await Promise.all([
+      const [repoRes, commitsRes, allPRs, langsRes, contribRes] = await Promise.all([
           axios.get(`https://api.github.com/repos/${owner}/${repo}`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`),
-          axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`),
+          fetchAllPRs(`https://api.github.com/repos/${info.owner}/${info.repo}/pulls?state=all`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/languages`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/contributors`)
       ]);
 
-      const openPRs = prsRes.data.filter(pr => pr.state === 'open');
-      const closedPRs = prsRes.data.filter(pr => pr.state === 'closed');
+      const openPRs = allPRs.filter(pr => pr.state === 'open');
+      const closedPRs = allPRs.filter(pr => pr.state === 'closed');
       const latestCommit = commitsRes.data[0];
 
       const stats = {
