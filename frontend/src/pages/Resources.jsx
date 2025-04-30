@@ -3,7 +3,8 @@ import Sidebar from "../components/Sidebar";
 import { Container, Row, Col, Form, Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Resources.css'
-import { useState } from "react";
+import axios from 'axios';
+import { useEffect,useState } from "react";
 
 const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -18,16 +19,52 @@ export default function Resources(){
   const [messages, setMessages] = useState([]); // resource url saved on page
   const [input, setInput] = useState(''); // resource url inputted in the input box
 
-  const handleSend = () => {
-    if (input.trim() !== '') {
-      setMessages([...messages, input]);
-      // setInput('');
+useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/resources', { withCredentials: true });
+        if (Array.isArray(response.data)) {
+            setMessages(response.data); // Set messages if the response is an array
+        } else {
+            // console.error('Unexpected response format:', response.data);
+            setMessages([]); // Fallback to an empty array
+        }
+    } catch (error) {
+        console.error('Error fetching resources:', error);
+        setMessages([]); // Fallback to an empty array in case of an error
     }
-  };
-  const handleDelete = (index) => {
-    const updatedMessages = messages.filter((_, msgIndex) => msgIndex !== index);
-    setMessages(updatedMessages);
-  };
+    };
+
+    fetchResources();
+}, []);
+
+const handleSend = async () => {
+  if (input.trim() !== '') {
+      try {
+          const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/resources', 
+              { message: input }, 
+              { withCredentials: true }
+          );
+          setMessages([...messages, response.data]); // Add the new resource to the UI
+          setInput('');
+      } catch (error) {
+          console.error('Error sending resource:', error);
+      }
+  }
+};
+
+const handleDelete = async (index) => {
+  if(confirm("Are you sure you want to delete this resource?")){
+  try {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/resources/${index}`, { withCredentials: true });
+      const updatedMessages = messages.filter((_, msgIndex) => msgIndex !== index);
+      setMessages(updatedMessages);
+  } catch (error) {
+      console.error('Error deleting resource:', error);
+  }
+}
+};
+
   return (
     <div>
         <Navbar title = "Resources"/>
@@ -35,33 +72,35 @@ export default function Resources(){
     <Container fluid className="d-flex flex-column p-3 resources-container">
       {/* Message Boxes */}
       <div className="flex-grow-1 overflow-auto mb-3">
-  {messages.map((msg, index) => (
-    <div 
-      key={index} 
-      style={{ borderColor: getRandomColor() }} 
-      className="p-3 mb-2 bg-light rounded shadow-sm resource-box position-relative"
-    >
-      {/* Sender Name */}
-      <div 
-        className="position-absolute top-0 start-0 p-2 sender-name"
-      >
-        Sender {/* Replace with actual sender name */}
-      </div>
+    {Array.isArray(messages) && messages.length > 0 ? (
+        messages.map((msg, index) => (
+            <div 
+                key={index} 
+                style={{ borderColor: getRandomColor() }} 
+                className="p-3 mb-2 bg-light rounded shadow-sm resource-box position-relative"
+            >
+                {/* Sender Name */}
+                <div className="position-absolute top-0 start-0 p-2 sender-name">
+                    {msg.sender}
+                </div>
 
-      {/* Delete Button */}
-      <button 
-        className="position-absolute top-0 end-0 btn btn-sm btn-danger btn-delete-resource" 
-        onClick={() => handleDelete(index)}
-      >
-        <i class="fa fa-trash-o"></i>
-      </button>
+                {/* Delete Button */}
+                <button 
+                    className="position-absolute top-0 end-0 btn btn-sm btn-danger btn-delete-resource" 
+                    onClick={() => handleDelete(index)}
+                >
+                    <i className="fa fa-trash-o"></i>
+                </button>
 
-      {/* Message Content */}
-      <div className="mt-4">
-        {msg}
-      </div>
-    </div>
-  ))}
+                {/* Message Content */}
+                <div className="mt-4">
+                    {msg.message}
+                </div>
+            </div>
+        ))
+    ) : (
+        <p className="text-center text-muted">No resources available.</p>
+    )}
 </div>
 
       {/* Input and Send Button */}
@@ -84,7 +123,7 @@ export default function Resources(){
           </Col>
           <Col xs={1}>
             <Button onClick={handleSend} variant="primary" className="w-100 btn-send">
-               <i class="fa fa-send-o"></i>
+               <i className="fa fa-send-o"></i>
             </Button>
           </Col>
         </Row>

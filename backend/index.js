@@ -7,6 +7,7 @@ const User = require('./src/models/User');
 const Team = require('./src/models/Team');
 const Task = require('./src/models/Task');
 const Idea = require('./src/models/Ideas');
+const Resource = require('./src/models/Resource');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -372,6 +373,64 @@ app.delete('/idea/:id', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+// POST a new resource
+app.post('/resources', userAuth, async (req, res) => {
+  const { message } = req.body;
+  const sender = req.user.username; // Assuming `username` is part of the user object
+  const teamCode = req.user.teamCode;
+
+  try {
+      let resource = await Resource.findOne({ teamCode });
+
+      if (!resource) {
+          resource = new Resource({ teamCode, resources: [] });
+      }
+
+      resource.resources.push({ sender, message });
+      await resource.save();
+
+      res.status(201).json(resource.resources[resource.resources.length - 1]); // Return the newly added resource
+  } catch (error) {
+      console.error('Error saving resource:', error);
+      res.status(500).json({ error: 'Failed to save resource' });
+  }
+});
+
+// GET all resources for a team
+app.get('/resources', userAuth, async (req, res) => {
+  const teamCode = req.user.teamCode;
+
+  try {
+      const resource = await Resource.findOne({ teamCode });
+      if (!resource) return res.json({ resources: [] });
+
+      res.json(resource.resources);
+  } catch (error) {
+      console.error('Error fetching resources:', error);
+      res.status(500).json({ error: 'Failed to fetch resources' });
+  }
+});
+
+// DELETE a specific resource
+app.delete('/resources/:id', userAuth, async (req, res) => {
+  const teamCode = req.user.teamCode;
+  const resourceId = req.params.id;
+
+  try {
+      const resource = await Resource.findOne({ teamCode });
+      if (!resource) return res.status(404).json({ error: 'Resource not found' });
+
+      resource.resources = resource.resources.filter((_, index) => index.toString() !== resourceId);
+      await resource.save();
+
+      res.json({ message: 'Resource deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting resource:', error);
+      res.status(500).json({ error: 'Failed to delete resource' });
+  }
+});
+
 //log out
 app.post('/logout', (req, res) => {
     res.clearCookie("token", {
