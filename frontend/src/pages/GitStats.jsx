@@ -62,7 +62,7 @@ const GitStats = () => {
                 {stats && (
                     <h1 className="text-center text-white display-4 my-4 project-title">{stats.name}</h1>
                 )}
-                <Container className='mx-5 p-4 bg-dark text-start'>
+                <Container fluid="md" className='mx-5 p-4 bg-dark text-start'>
                 <InputGroup className='mb-4'>
                     <InputGroup.Text className='bg-black text-pink'>
                         GitHub Repository: 
