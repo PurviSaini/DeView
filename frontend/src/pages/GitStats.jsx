@@ -1,6 +1,7 @@
 import React, { use, useEffect,useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, Card, Container, Row, Col, Badge, Button, InputGroup, FormGroup } from 'react-bootstrap';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -127,6 +128,48 @@ const GitStats = () => {
                             <Col md={6}>
                                 <h5>📅 Created On</h5>
                                 <p>{stats.createdAt}</p>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col md={6}>
+                                {stats.weeklyCommits.length > 0 && (
+                                    <>
+                                        <h5 className="mt-5 text-white">📊 Weekly Commit Activity</h5>
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <BarChart data={stats.weeklyCommits}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="weekStart" />
+                                                <YAxis />
+                                                <Tooltip />
+                                                <Bar dataKey="total" fill="#82ca9d" />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </>
+                                )}
+                            </Col>
+                            <Col md={6}>
+                                {stats.mostChangedFiles.length > 0 && (
+                                    <div className="mt-4 text-white">
+                                        <h5>📁 Most Changed Files</h5>
+                                        <table className="table table-dark table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File</th>
+                                                    <th>Changes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {stats.mostChangedFiles.map(f => (
+                                                    <tr key={f.filename}>
+                                                        <td>{f.filename}</td>
+                                                        <td>{f.changes}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
                             </Col>
                         </Row>
                     </Card>
