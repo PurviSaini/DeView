@@ -23,11 +23,18 @@ useEffect(() => {
     const fetchResources = async () => {
       try {
         const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/resources', { withCredentials: true });
+        // if (Array.isArray(response.data)) {
+        //     setMessages(response.data); // Set messages if the response is an array
+        // } else {
+        //     // console.error('Unexpected response format:', response.data);
+        //     setMessages([]); // Fallback to an empty array
+        // }
         if (Array.isArray(response.data)) {
-            setMessages(response.data); // Set messages if the response is an array
-        } else {
-            // console.error('Unexpected response format:', response.data);
-            setMessages([]); // Fallback to an empty array
+          const resourcesWithColors = response.data.map(msg => ({
+            ...msg,
+            color: getRandomColor()
+          }));
+          setMessages(resourcesWithColors);
         }
     } catch (error) {
         console.error('Error fetching resources:', error);
@@ -40,16 +47,22 @@ useEffect(() => {
 
 const handleSend = async () => {
   if (input.trim() !== '') {
-      try {
-          const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/resources', 
-              { message: input }, 
-              { withCredentials: true }
-          );
-          setMessages([...messages, response.data]); // Add the new resource to the UI
-          setInput('');
-      } catch (error) {
-          console.error('Error sending resource:', error);
-      }
+    try {
+      const color = getRandomColor();
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + '/resources',
+        { message: input },  // sending only the message to backend
+        { withCredentials: true }
+      );
+
+      // Locally attach color to the received message
+      const newMessage = { ...response.data, color };
+
+      setMessages([...messages, newMessage]);
+      setInput('');
+    } catch (error) {
+      console.error('Error sending resource:', error);
+    }
   }
 };
 
@@ -76,7 +89,7 @@ const handleDelete = async (index) => {
         messages.map((msg, index) => (
             <div 
                 key={index} 
-                style={{ borderColor: getRandomColor() }} 
+                style={{ borderColor: msg.color }} 
                 className="p-3 mb-2 bg-light rounded shadow-sm resource-box position-relative"
             >
                 {/* Sender Name */}
