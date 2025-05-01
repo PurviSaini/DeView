@@ -45,14 +45,6 @@ WHat tech stack is used to built the project?`);
             >
               <FaRegBookmark />
             </button>
-            {/* Save Button */}
-            {/* <div className="d-flex justify-content-center mb-2">
-              <button
-                className="btn btn-success btn-sm btn-save-markdown"
-                onClick={handleSave}
-              >
-                <FaRegBookmark /> Save changes
-              </button> */}
             </div>
           </div>
           <div className="col-md-6">
