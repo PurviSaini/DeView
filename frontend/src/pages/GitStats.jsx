@@ -149,27 +149,25 @@ const GitStats = () => {
                                 )}
                             </Col>
                             <Col md={6}>
-                                {stats.mostChangedFiles.length > 0 && (
-                                    <div className="mt-4 text-white">
-                                        <h5>📁 Most Changed Files</h5>
-                                        <table className="table table-dark table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>File</th>
-                                                    <th>Changes</th>
+                                <div className="mt-4 text-white">
+                                    <h5>📁 Most Changed Files</h5>
+                                    <table className="table table-dark table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>File</th>
+                                                <th>Changes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {stats.sortedFiles.map(f => (
+                                                <tr key={f.filename}>
+                                                    <td>{f.filename}</td>
+                                                    <td>{f.changes}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {stats.mostChangedFiles.map(f => (
-                                                    <tr key={f.filename}>
-                                                        <td>{f.filename}</td>
-                                                        <td>{f.changes}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </Col>
                         </Row>
                     </Card>
