@@ -28,8 +28,7 @@ h3.head{
 
 .btn-save-markdown{
     margin: 7px;
-    padding: 3px 10px !important;
+    padding: 1px 3px !important;
     font-size: 12px;
     border: none;
-    /* border-radius: 3px; */
 }
