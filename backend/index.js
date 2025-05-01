@@ -264,13 +264,33 @@ app.get('/repoStats',userAuth, async (req, res) => {
       const { owner, repo } = extractRepoInfo(repoUrl);
       if (!owner || !repo) return res.status(400).json({ message: 'Invalid repo URL.' });
 
-      const [repoRes, commitsRes, allPRs, langsRes, contribRes] = await Promise.all([
+      const [repoRes, commitsRes, allPRs, langsRes, contribRes, weeklyActivityRes] = await Promise.all([
           axios.get(`https://api.github.com/repos/${owner}/${repo}`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`),
           fetchAllPRs(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/languages`),
-          axios.get(`https://api.github.com/repos/${owner}/${repo}/contributors`)
+          axios.get(`https://api.github.com/repos/${owner}/${repo}/contributors`),
+          axios.get(`https://api.github.com/repos/${owner}/${repo}/stats/commit_activity`)
       ]);
+
+      const weeklyCommits = weeklyActivityRes.data.map(week => ({
+        weekStart: new Date(week.week * 1000).toLocaleDateString(),
+        total: week.total
+      }));
+
+      const recentCommits = commitsRes.data.slice(0, 10);
+      const recentFiles = {};
+      for (const commit of recentCommits) {
+        const commitData = await axios.get(commit.url);
+        const files = commitData.data.files || [];
+        files.forEach(f => {
+          recentFiles[f.filename] = (recentFiles[f.filename] || 0) + f.changes;
+        });
+      }
+      const sortedFiles = Object.entries(recentFiles)
+        .map(([filename, changes]) => ({ filename, changes }))
+        .sort((a, b) => b.changes - a.changes)
+        .slice(0, 5);
 
       const openPRs = allPRs.filter(pr => pr.state === 'open');
       const closedPRs = allPRs.filter(pr => pr.state === 'closed');
@@ -289,7 +309,9 @@ app.get('/repoStats',userAuth, async (req, res) => {
           deployedUrl: repoRes.data.homepage || 'N/A',
           contributors: contribRes.data.map(c => c.login).slice(0, 5),
           createdAt: new Date(repoRes.data.created_at).toLocaleDateString(),
-          defaultBranch: repoRes.data.default_branch
+          defaultBranch: repoRes.data.default_branch,
+          weeklyCommits,
+          sortedFiles
       };
 
       res.json(stats);
