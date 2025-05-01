@@ -132,23 +132,7 @@ const GitStats = () => {
                         </Row>
 
                         <Row>
-                            <Col md={6}>
-                                {stats.weeklyCommits.length > 0 && (
-                                    <>
-                                        <h5 className="mt-5 text-white">📊 Weekly Commit Activity</h5>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <BarChart data={stats.weeklyCommits}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="weekStart" />
-                                                <YAxis />
-                                                <Tooltip />
-                                                <Bar dataKey="total" fill="#82ca9d" />
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </>
-                                )}
-                            </Col>
-                            <Col md={6}>
+                            <Col>
                                 <div className="mt-4 text-white">
                                     <h5>📁 Most Changed Files</h5>
                                     <table className="table table-dark table-striped">
