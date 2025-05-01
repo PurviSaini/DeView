@@ -283,16 +283,17 @@ app.get('/repoStats',userAuth, async (req, res) => {
       const { owner, repo } = extractRepoInfo(repoUrl);
       if (!owner || !repo) return res.status(400).json({ message: 'Invalid repo URL.' });
 
-      const [repoRes, commitsRes, allPRs, langsRes, contribRes, weeklyActivityRes] = await Promise.all([
+      const [repoRes, commitsRes, allPRs, langsRes, contribRes] = await Promise.all([
           axios.get(`https://api.github.com/repos/${owner}/${repo}`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`),
           fetchAllPRs(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/languages`),
           axios.get(`https://api.github.com/repos/${owner}/${repo}/contributors`),
-          fetchCommitActivityWithRetry(owner, repo)
       ]);
 
-      const weeklyCommits = weeklyActivityRes.data.map(week => ({
+      const weeklyActivity = await fetchCommitActivityWithRetry(owner, repo);
+
+      const weeklyCommits = weeklyActivity.data.map(week => ({
         weekStart: new Date(week.week * 1000).toLocaleDateString(),
         total: week.total
       }));
