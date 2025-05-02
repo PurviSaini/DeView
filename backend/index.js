@@ -231,6 +231,7 @@ app.get("/repoUrl", userAuth, async (req, res) => {
 });
 
 const axiosInstance = axios.create({
+  baseURL: "https://api.github.com",
   headers: {
     Authorization: `token ${process.env.GITHUB_TOKEN}`,
     'User-Agent': 'DeView',
@@ -283,11 +284,16 @@ app.get('/repoStats',userAuth, async (req, res) => {
 
       const recentCommits = commitsRes.data.slice(0, 10);
       const recentFiles = {};
+      const recentFilesList = new Set();
+
       for (const commit of recentCommits) {
-        const commitData = await axios.get(commit.url);
+        const commitData = await axiosInstance(commit.url);
         const files = commitData.data.files || [];
         files.forEach(f => {
           recentFiles[f.filename] = (recentFiles[f.filename] || 0) + f.changes;
+          if (recentFilesList.size < 5) {
+            recentFilesList.add(f.filename);
+          }
         });
       }
       const sortedFiles = Object.entries(recentFiles)
@@ -313,6 +319,7 @@ app.get('/repoStats',userAuth, async (req, res) => {
           contributors: contribRes.data.map(c => c.login).slice(0, 5),
           createdAt: new Date(repoRes.data.created_at).toLocaleDateString(),
           defaultBranch: repoRes.data.default_branch,
+          recentMostFiles: Array.from(recentFilesList),
           sortedFiles
       };
 
@@ -320,6 +327,7 @@ app.get('/repoStats',userAuth, async (req, res) => {
 
   } catch (error) {
       console.error('Error fetching GitHub repo data:', error.response?.status || error.message);
+      console.error(error.response?.status, error.response?.data);
       res.status(500).json({ message: 'Failed to fetch repo stats.' });
   }
 });
