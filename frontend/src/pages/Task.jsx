@@ -55,7 +55,21 @@ export default function Task(){
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-    const handleShowDetails = (task) => {
+  useEffect(() => {
+    // Load filters from localStorage
+    const savedFilters = localStorage.getItem("taskFilters");
+    if (savedFilters) {
+      setFilters(JSON.parse(savedFilters));
+    }
+
+    // Load sort option from localStorage
+    const savedSortOption = localStorage.getItem("taskSortOption");
+    if (savedSortOption) {
+      setSortOption(savedSortOption);
+    }
+  }, []);
+
+  const handleShowDetails = (task) => {
         setSelectedTask(task);
         setShowModal(true);
     };
@@ -148,18 +162,34 @@ export default function Task(){
         }
     };
 
-    const toggleFilter = (type, value) => {
-        setFilters((prev) => ({
-          ...prev,
-          [type]: prev[type].includes(value)
-            ? prev[type].filter((v) => v !== value)
-            : [...prev[type], value]
-        }));
+  const toggleFilter = (type, value) => {
+    const updatedFilters = {
+      ...filters,
+      [type]: filters[type].includes(value)
+        ? filters[type].filter((v) => v !== value)
+        : [...filters[type], value],
     };
-    
-    const clearFilters = () => {
-        setFilters({ priority: [], assignedTo: [], status: [] });
-    };
+    setFilters(updatedFilters);
+
+    // Save filters to localStorage
+    localStorage.setItem("taskFilters", JSON.stringify(updatedFilters));
+  };
+
+  const clearFilters = () => {
+    const clearedFilters = { priority: [], assignedTo: [], status: [] };
+    setFilters(clearedFilters);
+
+    // Save cleared filters to localStorage
+    localStorage.setItem("taskFilters", JSON.stringify(clearedFilters));
+  };
+
+  const handleSortChange = (e) => {
+    const selectedSortOption = e.target.value;
+    setSortOption(selectedSortOption);
+
+    // Save sort option to localStorage
+    localStorage.setItem("taskSortOption", selectedSortOption);
+  };
 
     let displayedTasks = [...tasks];
 
@@ -312,7 +342,12 @@ export default function Task(){
                                 </div>
                             )}
                         </div>
-                        <Form.Select value={sortOption} className="bg-dark text-white" onChange={(e) => setSortOption(e.target.value)} style={{ width: "220px" }}>
+                        <Form.Select
+                            value={sortOption}
+                            className="bg-dark text-white"
+                            onChange={handleSortChange}
+                            style={{ width: "220px" }}
+                        >
                             <option value="">Sort By</option>
                             <option value="priorityHighLow">Priority (High → Low)</option>
                             <option value="priorityLowHigh">Priority (Low → High)</option>
