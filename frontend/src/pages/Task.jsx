@@ -1,6 +1,6 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useRef } from "react";
 import axios from 'axios';
-import { Form, Button, Card, Row, Col, Table, Modal } from "react-bootstrap";
+import { Form, Button, Card, Row, Col, Table, Modal, Dropdown } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/Sidebar"
@@ -10,6 +10,14 @@ export default function Task(){
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [teamMembers, setTeamMembers] = useState([]);
+    const [filters, setFilters] = useState({
+        priority: [],
+        assignedTo: [],
+        status: [],
+      });
+    const [sortOption, setSortOption] = useState("");
+    const filterDropdownRef = useRef();
+    const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -35,6 +43,16 @@ export default function Task(){
 
     fetchTeamMembers();
     fetchTasks();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
+        setShowFilterDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
     const handleShowDetails = (task) => {
@@ -127,7 +145,43 @@ export default function Task(){
             alert("Error deleting task");
             }
         }
-      };
+    };
+
+    const toggleFilter = (type, value) => {
+        setFilters((prev) => ({
+          ...prev,
+          [type]: prev[type].includes(value)
+            ? prev[type].filter((v) => v !== value)
+            : [...prev[type], value]
+        }));
+    };
+    
+    const clearFilters = () => {
+        setFilters({ priority: [], assignedTo: [], status: [] });
+    };
+
+    let displayedTasks = [...tasks];
+
+    // Filtering
+    if (filters.priority.length)
+        displayedTasks = displayedTasks.filter(t => filters.priority.includes(t.priority));
+    if (filters.assignedTo.length)
+        displayedTasks = displayedTasks.filter(t => filters.assignedTo.includes(t.assignedTo));
+    if (filters.status.length)
+        displayedTasks = displayedTasks.filter(t => filters.status.includes(t.status));
+
+    // Sorting
+    if (sortOption === "priorityLowHigh") {
+        displayedTasks.sort((a, b) =>
+            priorityOptions.indexOf(a.priority) - priorityOptions.indexOf(b.priority)
+        );
+    } else if (sortOption === "priorityHighLow") {
+        displayedTasks.sort((a, b) =>
+            priorityOptions.indexOf(b.priority) - priorityOptions.indexOf(a.priority)
+        );
+    } else if (sortOption === "dueDateRecent") {
+        displayedTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    }
 
     return (
         <div>
@@ -232,7 +286,39 @@ export default function Task(){
                 {/* Task Table */}
                 <Card className="m-5 p-4 shadow table-bg-gradient">
                     <h4 className="fw-bold text-center no-bg">Task List</h4>
-                    {tasks.length > 0 ? (
+                    <div className="d-flex justify-content-between align-items-center px-2">
+                        <div ref={filterDropdownRef} className="position-relative">
+                            <Button variant="outline-light btn-dark" onClick={() => setShowFilterDropdown(prev => !prev)}>
+                                Filter Tasks
+                            </Button>
+                            {showFilterDropdown && (
+                                <div className="position-absolute bg-dark text-white p-3 rounded shadow" style={{ zIndex: 10, minWidth: 220 }}>
+                                    <strong>Priority</strong>
+                                    {priorityOptions.map((p, i) => (
+                                        <Form.Check key={i} type="checkbox" className="no-border-checkbox m-1" label={p} checked={filters.priority.includes(p)} onChange={() => toggleFilter("priority", p)} />
+                                    ))}
+                                    <hr />
+                                    <strong>Assigned To</strong>
+                                    {teamMembers.map((m, i) => (
+                                        <Form.Check key={i} type="checkbox" className="no-border-checkbox m-1" label={m} checked={filters.assignedTo.includes(m)} onChange={() => toggleFilter("assignedTo", m)} />
+                                    ))}
+                                    <hr />
+                                    <strong>Status</strong>
+                                    {statusOptions.map((s, i) => (
+                                        <Form.Check key={i} type="checkbox" className="no-border-checkbox m-1" label={s} checked={filters.status.includes(s)} onChange={() => toggleFilter("status", s)} />
+                                    ))}
+                                    <Button variant="link" className="mt-2 text-danger p-0" onClick={clearFilters}>Clear Filters</Button>
+                                </div>
+                            )}
+                        </div>
+                        <Form.Select value={sortOption} className="bg-dark text-white" onChange={(e) => setSortOption(e.target.value)} style={{ width: "220px" }}>
+                            <option value="">Sort By</option>
+                            <option value="priorityHighLow">Priority (High → Low)</option>
+                            <option value="priorityLowHigh">Priority (Low → High)</option>
+                            <option value="dueDateRecent">Due Date (Most Recent First)</option>
+                        </Form.Select>
+                    </div>
+                    {displayedTasks.length > 0 ? (
                         <div className="no-bg">
                         <Table bg-none responsive bordered hover className="mt-3 text-center no-bg">
                             <thead className="table-dark">
@@ -246,7 +332,7 @@ export default function Task(){
                                 </tr>
                             </thead>
                             <tbody>
-                            {tasks.map((task, index) => (
+                            {displayedTasks.map((task, index) => (
                                 <tr key={index}>
                                     <td>
                                         <button
