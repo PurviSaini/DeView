@@ -111,11 +111,13 @@ export default function Task(){
     };
 
     const handleTaskChange = async (index, field, value) => {
-        const updatedTasks = [...tasks];
-        updatedTasks[index][field] = value;
-        setTasks(updatedTasks);
+        const taskToUpdate = displayedTasks[index];
+        const taskId = taskToUpdate._id;
 
-        const taskId = updatedTasks[index]._id;
+        const updatedTasks = tasks.map((task) =>
+            task._id === taskId ? { ...task, [field]: value } : task
+        );
+        setTasks(updatedTasks);
 
         try {
             await axios.patch(
@@ -131,14 +133,13 @@ export default function Task(){
         }
     };
 
-    const handleDeleteTask = async (index) => {
+    const handleDeleteTask = async (taskId) => {
         if(confirm("Are you sure you want to delete this task?")){
-            const taskId = tasks[index]._id;
             try {
             await axios.delete(import.meta.env.VITE_BACKEND_URL+ "/tasks" + `/${taskId}`,{
                 withCredentials: true,
             });
-            const updatedTasks = tasks.filter((_, i) => i !== index);
+            const updatedTasks = tasks.filter((task) => task._id !== taskId);
             setTasks(updatedTasks);
             } catch (err) {
             console.error("Failed to delete task", err);
@@ -390,7 +391,7 @@ export default function Task(){
                                             variant="danger"
                                             size="sm"
                                             className="rounded-pill calendar-dark"
-                                            onClick={() => handleDeleteTask(index)}
+                                            onClick={() => handleDeleteTask(task._id)}
                                         >
                                             Delete
                                         </Button>
