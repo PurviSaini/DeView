@@ -10,6 +10,7 @@ import {
   Button,
   InputGroup,
   FormGroup,
+  ListGroup
 } from "react-bootstrap";
 import {
   BarChart,
@@ -187,7 +188,7 @@ const GitStats = () => {
                   </Row>
 
                   <Row>
-                    <Col>
+                    <Col md={6}>
                       <div className="mt-4 text-white">
                         <h5>📁 Most Changed Files</h5>
                         <table className="table table-dark table-striped">
@@ -206,6 +207,28 @@ const GitStats = () => {
                             ))}
                           </tbody>
                         </table>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      <div className="mt-4 text-white">
+                        <h5>📂 Recently Used Files</h5>
+                        <ListGroup variant="flush">
+                          {stats.recentMostFiles.map((file, index) => (
+                            <ListGroup.Item
+                              key={index}
+                              className="d-flex justify-content-between align-items-center bg-dark text-white border-secondary rounded mb-2"
+                              style={{ fontFamily: 'monospace', fontSize: '0.95rem' }}
+                            >
+                              <span>
+                              <i className="bi bi-file-earmark-code me-2 text-info"></i>
+                                {file}
+                              </span>
+                              <Badge bg="secondary" pill>
+                                #{index + 1}
+                              </Badge>
+                            </ListGroup.Item>
+                          ))}
+                        </ListGroup>
                       </div>
                     </Col>
                   </Row>
