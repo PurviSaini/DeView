@@ -16,7 +16,7 @@ What is the purpose of your project?
 ### What it does
 What does the project does?
 ### How we built it
-WHat tech stack is used to built the project?`);
+What tech stack is used to built the project?`);
 
   const handleSave = () => {
     // Handle save logic here
