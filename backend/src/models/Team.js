@@ -10,7 +10,10 @@ const teamSchema = new mongoose.Schema({
     },
     gitRepoUrl: {
         type: String,
-    }
+    },
+    projectDesc: {
+        type: String,
+    },
 });
 
 const Team = mongoose.model('Team', teamSchema);
