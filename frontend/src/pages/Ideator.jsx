@@ -348,8 +348,9 @@ const Ideator = () => {
         </div>
 
         {/* {loading && <Loader />} */}
+        {/* <Loader message="Submitting your idea"/> */}
         {loading ? (
-            <Loader message="Submitting your idea..."/>
+            <Loader message="Submitting your idea"/>
         ) : (
           <>
             {submittedData.length > 0 && ( //change start
