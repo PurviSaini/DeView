@@ -10,7 +10,7 @@ import {
   Button,
   InputGroup,
   FormGroup,
-  ListGroup
+  ListGroup,
 } from "react-bootstrap";
 import {
   BarChart,
@@ -96,147 +96,142 @@ const GitStats = () => {
       <Navbar title="Github Stats" />
       <Sidebar />
       <div className="task-container p-3">
-            {stats && (
-              <h1 className="text-center text-white display-4 my-4 project-title">
-                {stats.name}
-              </h1>
-            )}
-            <Container fluid="md" className="mx-5 p-4 bg-dark text-start">
-              <InputGroup className="mb-4">
-                <InputGroup.Text className="bg-black text-pink">
-                  GitHub Repository:
-                </InputGroup.Text>
-                <Form.Control
-                  type="text"
-                  className="dark-input"
-                  placeholder="https://github.com/username/repo"
-                  value={repoUrl}
-                  onChange={(e) => setRepoUrl(e.target.value)}
-                />
-                <Button variant="info" onClick={handlefetch}>
-                  Fetch
-                </Button>
-              </InputGroup>
-                {loading ? (
-                    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-                    <Loader /> {/* Show loader while loading */}
-                </div>
-                ) : (
-                <>
-              {stats && (
-                <Card className="p-4 stats-bg-gradient text-white">
-                  <Row className="mb-4">
-                    <Col md={6}>
-                      <h5>📊 Pull Requests</h5>
-                      <p>
-                        ✅ Open: {stats.openPRs} | ❎ Closed: {stats.closedPRs}
-                      </p>
-                    </Col>
-                    <Col md={6}>
-                      <h5>🚀 Total Commits</h5>
-                      <p>{stats.commitsCount}</p>
-                    </Col>
-                  </Row>
+        {stats && (
+          <h1 className="text-center text-white display-4 my-4 project-title">
+            {stats.name}
+          </h1>
+        )}
+        <Container fluid="md" className="mx-5 p-4 bg-dark text-start">
+          <InputGroup className="mb-4">
+            <InputGroup.Text className="bg-black text-pink">
+              GitHub Repository:
+            </InputGroup.Text>
+            <Form.Control
+              type="text"
+              className="dark-input"
+              placeholder="https://github.com/username/repo"
+              value={repoUrl}
+              onChange={(e) => setRepoUrl(e.target.value)}
+            />
+            <Button variant="info" onClick={handlefetch}>
+              Fetch
+            </Button>
+          </InputGroup>
+          {stats && (
+            <Card className="p-4 stats-bg-gradient text-white">
+              <Row className="mb-4">
+                <Col md={6}>
+                  <h5>📊 Pull Requests</h5>
+                  <p>
+                    ✅ Open: {stats.openPRs} | ❎ Closed: {stats.closedPRs}
+                  </p>
+                </Col>
+                <Col md={6}>
+                  <h5>🚀 Total Commits</h5>
+                  <p>{stats.commitsCount}</p>
+                </Col>
+              </Row>
 
-                  <Row className="mb-4">
-                    <Col md={6}>
-                      <h5>🔁 Latest Commit</h5>
-                      <p>
-                        <strong>Title:</strong> {stats.latestCommit.message}
-                      </p>
-                      <p>
-                        <strong>By:</strong> {stats.latestCommit.author}
-                      </p>
-                    </Col>
-                    <Col md={6}>
-                      <h5>🌐 Deployed URL</h5>
-                      <p>{stats.deployedUrl}</p>
-                    </Col>
-                  </Row>
+              <Row className="mb-4">
+                <Col md={6}>
+                  <h5>🔁 Latest Commit</h5>
+                  <p>
+                    <strong>Title:</strong> {stats.latestCommit.message}
+                  </p>
+                  <p>
+                    <strong>By:</strong> {stats.latestCommit.author}
+                  </p>
+                </Col>
+                <Col md={6}>
+                  <h5>🌐 Deployed URL</h5>
+                  <p>{stats.deployedUrl}</p>
+                </Col>
+              </Row>
 
-                  <Row className="mb-4">
-                    <Col md={6}>
-                      <h5>🛠️ Languages</h5>
-                      <div>
-                        {stats.languages.map((lang) => (
-                          <Badge
-                            bg="info"
-                            text="dark"
-                            className="me-2 mb-1"
-                            key={lang}
-                          >
-                            {lang}
-                          </Badge>
+              <Row className="mb-4">
+                <Col md={6}>
+                  <h5>🛠️ Languages</h5>
+                  <div>
+                    {stats.languages.map((lang) => (
+                      <Badge
+                        bg="info"
+                        text="dark"
+                        className="me-2 mb-1"
+                        key={lang}
+                      >
+                        {lang}
+                      </Badge>
+                    ))}
+                  </div>
+                </Col>
+                <Col md={6}>
+                  <h5>👥 Top Contributors</h5>
+                  <p>{stats.contributors.join(", ")}</p>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <h5>🌿 Default Branch</h5>
+                  <p>{stats.defaultBranch}</p>
+                </Col>
+                <Col md={6}>
+                  <h5>📅 Created On</h5>
+                  <p>{stats.createdAt}</p>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <div className="mt-4 text-white">
+                    <h5>📁 Most Changed Files</h5>
+                    <table className="table table-dark table-striped">
+                      <thead>
+                        <tr>
+                          <th>File</th>
+                          <th>Changes</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {stats.sortedFiles.map((f) => (
+                          <tr key={f.filename}>
+                            <td>{f.filename}</td>
+                            <td>{f.changes}</td>
+                          </tr>
                         ))}
-                      </div>
-                    </Col>
-                    <Col md={6}>
-                      <h5>👥 Top Contributors</h5>
-                      <p>{stats.contributors.join(", ")}</p>
-                    </Col>
-                  </Row>
-
-                  <Row>
-                    <Col md={6}>
-                      <h5>🌿 Default Branch</h5>
-                      <p>{stats.defaultBranch}</p>
-                    </Col>
-                    <Col md={6}>
-                      <h5>📅 Created On</h5>
-                      <p>{stats.createdAt}</p>
-                    </Col>
-                  </Row>
-
-                  <Row>
-                    <Col md={6}>
-                      <div className="mt-4 text-white">
-                        <h5>📁 Most Changed Files</h5>
-                        <table className="table table-dark table-striped">
-                          <thead>
-                            <tr>
-                              <th>File</th>
-                              <th>Changes</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {stats.sortedFiles.map((f) => (
-                              <tr key={f.filename}>
-                                <td>{f.filename}</td>
-                                <td>{f.changes}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </Col>
-                    <Col md={6}>
-                      <div className="mt-4 text-white">
-                        <h5>📂 Recently Used Files</h5>
-                        <ListGroup variant="flush">
-                          {stats.recentMostFiles.map((file, index) => (
-                            <ListGroup.Item
-                              key={index}
-                              className="d-flex justify-content-between align-items-center bg-dark text-white border-secondary rounded mb-2"
-                              style={{ fontFamily: 'monospace', fontSize: '0.95rem' }}
-                            >
-                              <span>
-                              <i className="bi bi-file-earmark-code me-2 text-info"></i>
-                                {file}
-                              </span>
-                              <Badge bg="secondary" pill>
-                                #{index + 1}
-                              </Badge>
-                            </ListGroup.Item>
-                          ))}
-                        </ListGroup>
-                      </div>
-                    </Col>
-                  </Row>
-                </Card>
-              )}
-              </>
-              )}
-            </Container>
+                      </tbody>
+                    </table>
+                  </div>
+                </Col>
+                <Col md={6}>
+                  <div className="mt-4 text-white">
+                    <h5>📂 Recently Used Files</h5>
+                    <ListGroup variant="flush">
+                      {stats.recentMostFiles.map((file, index) => (
+                        <ListGroup.Item
+                          key={index}
+                          className="d-flex justify-content-between align-items-center bg-dark text-white border-secondary rounded mb-2"
+                          style={{
+                            fontFamily: "monospace",
+                            fontSize: "0.95rem",
+                          }}
+                        >
+                          <span>
+                            <i className="bi bi-file-earmark-code me-2 text-info"></i>
+                            {file}
+                          </span>
+                          <Badge bg="secondary" pill>
+                            #{index + 1}
+                          </Badge>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </div>
+                </Col>
+              </Row>
+            </Card>
+          )}
+        </Container>
       </div>
     </div>
   );
