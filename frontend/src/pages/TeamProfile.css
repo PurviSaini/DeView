@@ -1,0 +1,13 @@
+.bg-member-profile {
+    background: linear-gradient(#2e3137, #89858d);
+    border-radius: 15px;
+    border: 1px solid rgb(174, 172, 172);
+}
+
+.text-green {
+    color: #31c64a;
+}
+
+.text-blue {
+    color: #1188ff;
+}
