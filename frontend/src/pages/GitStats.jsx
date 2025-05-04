@@ -31,7 +31,19 @@ import "./GitStats.css";
 const GitStats = () => {
   const [loading, setLoading] = useState(false);
   const [repoUrl, setRepoUrl] = useState("");
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState({
+    openPRs: 0,
+    closedPRs: 0,
+    commitsCount: 0,
+    latestCommit: { message: "", author: "" },
+    deployedUrl: "",
+    languages: [],
+    contributors: [],
+    defaultBranch: "",
+    createdAt: "",
+    sortedFiles: [],
+    recentMostFiles: [],
+  });
 
   const fetchStats = async () => {
     setLoading(true);
@@ -124,7 +136,7 @@ const GitStats = () => {
               Fetch
             </Button>
           </InputGroup>
-          {stats && (
+          
             <Card className="p-4 stats-bg-gradient text-white">
               <Row className="mb-4">
                 <Col md={6}>
@@ -320,7 +332,6 @@ const GitStats = () => {
                 </Col>
               </Row>
             </Card>
-          )}
         </Container>
       </div>
     </div>
