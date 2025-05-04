@@ -11,6 +11,7 @@ import {
   InputGroup,
   FormGroup,
   ListGroup,
+  Placeholder,
 } from "react-bootstrap";
 import {
   BarChart,
@@ -96,10 +97,16 @@ const GitStats = () => {
       <Navbar title="Github Stats" />
       <Sidebar />
       <div className="task-container p-3">
-        {stats && (
-          <h1 className="text-center text-white display-4 my-4 project-title">
-            {stats.name}
-          </h1>
+        {loading ? (
+          <Placeholder as="h1" animation="glow">
+            <Placeholder xs={6} />
+          </Placeholder>
+        ) : (
+          stats && (
+            <h1 className="text-center text-white display-4 my-4 project-title">
+              {stats.name}
+            </h1>
+          )
         )}
         <Container fluid="md" className="mx-5 p-4 bg-dark text-start">
           <InputGroup className="mb-4">
@@ -122,62 +129,119 @@ const GitStats = () => {
               <Row className="mb-4">
                 <Col md={6}>
                   <h5>📊 Pull Requests</h5>
-                  <p>
-                    ✅ Open: {stats.openPRs} | ❎ Closed: {stats.closedPRs}
-                  </p>
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} /> <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>
+                      ✅ Open: {stats.openPRs} | ❎ Closed: {stats.closedPRs}
+                    </p>
+                  )}
                 </Col>
                 <Col md={6}>
                   <h5>🚀 Total Commits</h5>
-                  <p>{stats.commitsCount}</p>
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>{stats.commitsCount}</p>
+                  )}
                 </Col>
               </Row>
 
               <Row className="mb-4">
                 <Col md={6}>
                   <h5>🔁 Latest Commit</h5>
-                  <p>
-                    <strong>Title:</strong> {stats.latestCommit.message}
-                  </p>
-                  <p>
-                    <strong>By:</strong> {stats.latestCommit.author}
-                  </p>
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>
+                      <strong>Title:</strong> {stats.latestCommit.message}
+                    </p>
+                  )}
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>
+                      <strong>By:</strong> {stats.latestCommit.author}
+                    </p>
+                  )}
                 </Col>
                 <Col md={6}>
                   <h5>🌐 Deployed URL</h5>
-                  <p>{stats.deployedUrl}</p>
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>{stats.deployedUrl}</p>
+                  )}
                 </Col>
               </Row>
 
               <Row className="mb-4">
                 <Col md={6}>
                   <h5>🛠️ Languages</h5>
-                  <div>
-                    {stats.languages.map((lang) => (
-                      <Badge
-                        bg="info"
-                        text="dark"
-                        className="me-2 mb-1"
-                        key={lang}
-                      >
-                        {lang}
-                      </Badge>
-                    ))}
-                  </div>
+                  {loading ? (
+                    <Placeholder.Button
+                      variant="info"
+                      xs={2}
+                      className="me-2"
+                      animation="glow"
+                    />
+                  ) : (
+                    <div>
+                      {stats.languages.map((lang) => (
+                        <Badge
+                          bg="info"
+                          text="dark"
+                          className="me-2 mb-1"
+                          key={lang}
+                        >
+                          {lang}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </Col>
                 <Col md={6}>
                   <h5>👥 Top Contributors</h5>
-                  <p>{stats.contributors.join(", ")}</p>
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>{stats.contributors.join(", ")}</p>
+                  )}
                 </Col>
               </Row>
 
               <Row>
                 <Col md={6}>
                   <h5>🌿 Default Branch</h5>
-                  <p>{stats.defaultBranch}</p>
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>{stats.defaultBranch}</p>
+                  )}
                 </Col>
                 <Col md={6}>
                   <h5>📅 Created On</h5>
-                  <p>{stats.createdAt}</p>
+                  {loading ? (
+                    <Placeholder animation="glow">
+                      <Placeholder xs={3} />
+                    </Placeholder>
+                  ) : (
+                    <p>{stats.createdAt}</p>
+                  )}
                 </Col>
               </Row>
 
@@ -193,12 +257,27 @@ const GitStats = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {stats.sortedFiles.map((f) => (
-                          <tr key={f.filename}>
-                            <td>{f.filename}</td>
-                            <td>{f.changes}</td>
-                          </tr>
-                        ))}
+                        {loading
+                          ? [...Array(3)].map((_, i) => (
+                              <tr key={i}>
+                                <td>
+                                  <Placeholder as="span" animation="glow">
+                                    <Placeholder xs={6} />
+                                  </Placeholder>
+                                </td>
+                                <td>
+                                  <Placeholder as="span" animation="glow">
+                                    <Placeholder xs={2} />
+                                  </Placeholder>
+                                </td>
+                              </tr>
+                            ))
+                          : stats.sortedFiles.map((f) => (
+                              <tr key={f.filename}>
+                                <td>{f.filename}</td>
+                                <td>{f.changes}</td>
+                              </tr>
+                            ))}
                       </tbody>
                     </table>
                   </div>
@@ -207,24 +286,35 @@ const GitStats = () => {
                   <div className="mt-4 text-white">
                     <h5>📂 Recently Used Files</h5>
                     <ListGroup variant="flush">
-                      {stats.recentMostFiles.map((file, index) => (
-                        <ListGroup.Item
-                          key={index}
-                          className="d-flex justify-content-between align-items-center bg-dark text-white border-secondary rounded mb-2"
-                          style={{
-                            fontFamily: "monospace",
-                            fontSize: "0.95rem",
-                          }}
-                        >
-                          <span>
-                            <i className="bi bi-file-earmark-code me-2 text-info"></i>
-                            {file}
-                          </span>
-                          <Badge bg="secondary" pill>
-                            #{index + 1}
-                          </Badge>
-                        </ListGroup.Item>
-                      ))}
+                      {loading
+                        ? [...Array(4)].map((_, i) => (
+                            <ListGroup.Item
+                              key={i}
+                              className="bg-dark text-white border-secondary rounded mb-2"
+                            >
+                              <Placeholder as="span" animation="glow">
+                                <Placeholder xs={8} />
+                              </Placeholder>
+                            </ListGroup.Item>
+                          ))
+                        : stats.recentMostFiles.map((file, index) => (
+                            <ListGroup.Item
+                              key={index}
+                              className="d-flex justify-content-between align-items-center bg-dark text-white border-secondary rounded mb-2"
+                              style={{
+                                fontFamily: "monospace",
+                                fontSize: "0.95rem",
+                              }}
+                            >
+                              <span>
+                                <i className="bi bi-file-earmark-code me-2 text-info"></i>
+                                {file}
+                              </span>
+                              <Badge bg="secondary" pill>
+                                #{index + 1}
+                              </Badge>
+                            </ListGroup.Item>
+                          ))}
                     </ListGroup>
                   </div>
                 </Col>
