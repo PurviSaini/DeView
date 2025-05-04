@@ -7,6 +7,7 @@ const User = require('./src/models/User');
 const Team = require('./src/models/Team');
 const Task = require('./src/models/Task');
 const Idea = require('./src/models/Ideas');
+const Documentation = require('./src/models/Documentation');
 const Resource = require('./src/models/Resource');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
@@ -461,6 +462,39 @@ app.delete('/resources/:id', userAuth, async (req, res) => {
       console.error('Error deleting resource:', error);
       res.status(500).json({ error: 'Failed to delete resource' });
   }
+});
+
+//save project documentation
+app.post('/documentation', userAuth, async (req, res) => {
+  const { teamCode } = req.user;
+  const { projectDesc } = req.body;
+  try {
+    let documentation = await Documentation.findOne({ teamCode });
+    if (!documentation) {
+      documentation = new Documentation({ teamCode, projectDesc });
+      await documentation.save();
+    } else {
+      documentation.projectDesc = projectDesc;
+      await documentation.save();
+    }
+    res.status(200).json({ message: 'Documentation updated successfully', documentation });
+  } catch (error) {
+    console.error('Error updating documentation:', error);
+    res.status(500).json({ error: 'Failed to update documentation' });
+  }
+  });
+
+//get project documentation
+app.get('/documentation', userAuth, async (req, res) => {
+  const { teamCode } = req.user;
+  try {
+    const documentation = await Documentation.findOne({ teamCode });
+    if (!documentation) return res.status(404).json({ error: 'Documentation not found' });
+    res.json(documentation);
+  } catch (error) {
+    console.error('Error fetching documentation:', error);
+    res.status(500).json({ error: 'Failed to fetch documentation' });
+  };
 });
 
 //log out
