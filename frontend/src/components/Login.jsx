@@ -47,7 +47,7 @@ export default function Login() {
       </p>
       {loading && (
         <div className="loader-overlay">
-          <Loader message="Loggin In" spinner="true"/>
+          <Loader message="Loggin In" spinner={true}/>
         </div>
       )}
       <form className={`log_register ${loading ? 'blurred' : ''}`} action="/">
