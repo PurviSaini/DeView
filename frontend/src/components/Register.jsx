@@ -44,7 +44,7 @@ export default function Register() {
       </p>
       {loading && (
         <div className="loader-overlay">
-          <Loader message="Registerin User" spinner="true" />
+          <Loader message="Registerin User" spinner={true} />
         </div>
       )}
       <form>
