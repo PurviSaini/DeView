@@ -96,7 +96,7 @@ form> p{
     color:#95c25a;
 }
 
-.loader-overlay {
+/* .loader-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -108,7 +108,7 @@ form> p{
     align-items: center;
     justify-content: center;
     transition: all 0.5s;
-  }
+  } */
   
   /* Blur form when loading */
   .blurred {

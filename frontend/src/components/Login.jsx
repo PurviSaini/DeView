@@ -24,7 +24,7 @@ export default function Login() {
         },
         { withCredentials: true }
       );
-      alert(res.data.message);
+      // alert(res.data.message);
       localStorage.setItem("username", username);
       const teamCode = res.data.teamCode;
       if (teamCode) {
@@ -36,7 +36,7 @@ export default function Login() {
       alert("Can't Login! Invalid Credentials.");
       console.log(err);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
   return (
@@ -45,12 +45,10 @@ export default function Login() {
         <h2>DeView: Your Project, from Vision to Version</h2>
         <i>Track tasks, spark ideas, analyze code — all in one place.</i>
       </p>
-      {loading && (
-        <div className="loader-overlay">
-          <Loader message="Loggin In" spinner={true}/>
-        </div>
-      )}
-      <form className={`log_register ${loading ? 'blurred' : ''}`} action="/">
+      
+      {loading && <Loader message="Loggin In" type="hourglass" />
+      }
+      <form className={`log_register ${loading ? "blurred" : ""}`} action="/">
         <p id="heading">Log In</p>
         {/* input for email */}
         <label htmlFor="username">
