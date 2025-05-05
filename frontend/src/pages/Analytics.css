@@ -1,11 +1,58 @@
 body {
     font-family: "Poppins", sans-serif;
-      background-color: #010409;
-      color: white;
-    }
-    
-div.task-container{
-        padding: 1rem;
-        margin-left: 7rem;
-        align-items: start;
+    background-color: #010409;
+    color: white;
+}
+
+div.task-container {
+    padding: 1rem;
+    margin-left: 7rem; /* Adjust for sidebar width */
+    align-items: start;
+}
+
+.analytics-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12-column grid */
+    gap: 20px;
+    padding: 20px;
+    margin-left: 9rem; /* Ensure graphs start after the sidebar */
+}
+
+.chart-container {
+    background-color: #1e1e2f;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* First row: Pie chart (4 columns) and Heatmap (8 columns) */
+.pie-chart {
+    grid-column: span 4; /* Takes 4 columns */
+}
+
+.heatmap {
+    grid-column: span 8; /* Takes 8 columns */
+}
+
+/* Second row: Bar chart (8 columns) and Personal tasks (4 columns) */
+.bar-chart {
+    grid-column: span 8; /* Takes 8 columns */
+}
+
+.personal-tasks {
+    grid-column: span 4; /* Takes 4 columns */
+}
+
+.heatmap-placeholder,
+.personal-tasks-placeholder {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2e2e3f;
+    border-radius: 10px;
+    color: #888;
+    font-size: 18px;
 }

@@ -1,4 +1,5 @@
-import React, { useState,useEffect, useRef } from "react";
+import React, { useContext,useState,useEffect, useRef } from "react";
+import { TaskContext } from '../context/TaskContext';
 import axios from 'axios';
 import { Form, Button, Card, Row, Col, Table, Modal, Dropdown, Badge } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
@@ -9,6 +10,7 @@ import Sidebar from "../components/Sidebar"
 import './Task.css'
 
 export default function Task(){
+    const { tasks, setTasks } = useContext(TaskContext);
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [teamMembers, setTeamMembers] = useState([]);
@@ -45,7 +47,7 @@ export default function Task(){
 
     fetchTeamMembers();
     fetchTasks();
-  }, []);
+  }, [setTasks]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -81,7 +83,6 @@ export default function Task(){
         setShowModal(false);
     };
 
-    const [tasks, setTasks] = useState([]);
     const [formData, setFormData] = useState({
         title: "",
         dueDate: "",
