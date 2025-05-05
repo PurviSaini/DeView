@@ -31,7 +31,7 @@ export default function Navbar({ title }){
         <nav className='sticky-top'>
             <span>{ title || "DeView" }</span>
 
-<Dropdown>
+<Dropdown className='drop-css'>
       <Dropdown.Toggle variant="primary" className="no-arrow">
       <i className="fa fa-user-o"></i>
       </Dropdown.Toggle>

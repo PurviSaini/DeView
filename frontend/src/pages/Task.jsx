@@ -1,7 +1,9 @@
 import React, { useState,useEffect, useRef } from "react";
 import axios from 'axios';
-import { Form, Button, Card, Row, Col, Table, Modal, Dropdown } from "react-bootstrap";
+import { Form, Button, Card, Row, Col, Table, Modal, Dropdown, Badge } from "react-bootstrap";
+import { FaTrash } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/Sidebar"
 import './Task.css'
@@ -214,6 +216,32 @@ export default function Task(){
         displayedTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
     }
 
+    const getUserColor = (username) => {
+        const colors = ['#e73cbf', '#a812f3', '#3498db', '#1abc9c'];
+        const index = teamMembers.indexOf(username);
+        return colors[index % colors.length]; // wrap around if more users
+    };  
+    
+    const getStatusColor = (status) => {
+        const statusColors = ["#0d6efd", "#fd7e14","#20c997"];
+        const index = statusOptions.indexOf(status);
+        return statusColors[index % statusColors.length] || "#6c757d"; // fallback gray
+    };
+      
+    
+    const getPriorityVariant = (priority) => {
+        switch (priority) {
+          case "high":
+            return "danger";
+          case "med":
+            return "warning";
+          case "low":
+            return "success";
+          default:
+            return "secondary";
+        }
+    };
+
     return (
         <div>
             <Navbar title="Tasks"/>
@@ -318,10 +346,50 @@ export default function Task(){
                 <Card className="m-5 p-4 shadow table-bg-gradient">
                     <h4 className="fw-bold text-center no-bg">Task List</h4>
                     <div className="d-flex justify-content-between align-items-center px-2">
-                        <div ref={filterDropdownRef} className="position-relative">
+                        <div className="d-flex align-items-center flex-wrap gap-2" ref={filterDropdownRef}>
                             <Button variant="outline-light btn-dark" onClick={() => setShowFilterDropdown(prev => !prev)}>
                                 Filter Tasks
                             </Button>
+                            <div className="d-flex flex-wrap gap-2 ms-2">
+                                {/* Priority filters */}
+                                {filters.priority.map((p, i) => (
+                                    <Badge key={`p-${i}`} bg={getPriorityVariant(p)} className="px-2 py-1">
+                                        {p}
+                                    </Badge>
+                                ))}
+
+                                {/* Assigned To filters */}
+                                {filters.assignedTo.map((name, i) => (
+                                    <Badge
+                                        key={`a-${i}`}
+                                        bg="dark"
+                                        className="px-2 py-1"
+                                        style={{
+                                            color: getUserColor(name),
+                                            fontWeight: "bold",
+                                            backgroundColor: "#343a40", // dark background
+                                        }}
+                                    >
+                                        {name}
+                                    </Badge>
+                                ))}
+
+                                {/* Status filters */}
+                                {filters.status.map((s, i) => (
+                                    <Badge
+                                        key={`s-${i}`}
+                                        bg="dark"
+                                        className="px-2 py-1"
+                                        style={{
+                                            color: getStatusColor(s),
+                                            fontWeight: "bold",
+                                            backgroundColor: "#343a40",
+                                        }}
+                                    >
+                                        {s}
+                                    </Badge>
+                                ))}
+                            </div>
                             {showFilterDropdown && (
                                 <div className="position-absolute bg-dark text-white p-3 rounded shadow" style={{ zIndex: 10, minWidth: 220 }}>
                                     <strong>Priority</strong>
@@ -355,11 +423,10 @@ export default function Task(){
                         </Form.Select>
                     </div>
                     {displayedTasks.length > 0 ? (
-                        <div className="no-bg">
-                        <Table bg-none responsive bordered hover className="mt-3 text-center no-bg">
+                        <Table variant="dark" responsive bordered hover className="mt-3 text-center" style={{wordWrap: "break-word"}}>
                             <thead className="table-dark">
                                 <tr>
-                                    <th>Title</th>
+                                    <th style={{width: "30%"}}>Title</th>
                                     <th>Due Date</th>
                                     <th>Assigned To</th>
                                     <th>Priority</th>
@@ -372,70 +439,97 @@ export default function Task(){
                                 <tr key={index}>
                                     <td>
                                         <button
-                                            className="btn btn-link text-decoration-none p-0 text-dark"
+                                            className="btn btn-link text-decoration-none p-0 text-white fw-bold"
                                                 onClick={() => handleShowDetails(task)}
                                         >
                                             {task.title}
                                         </button>
                                     </td>
-                                    <td>{task.dueDate}</td>
-                                    <td>
-                                        <Form.Select
-                                            value={task.assignedTo}
-                                            onChange={(e) =>
-                                                handleTaskChange(index, "assignedTo", e.target.value)
-                                            }
-                                        >
-                                            {teamMembers.map((member, i) => (
-                                                <option key={i} value={member}>
-                                                {member}
-                                                </option>
-                                            ))}
-                                        </Form.Select>
+                                    <td>{new Date(task.dueDate).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric"
+                                        })}
                                     </td>
                                     <td>
-                                        <Form.Select
-                                            value={task.priority}
-                                            onChange={(e) =>
-                                                handleTaskChange(index, "priority", e.target.value)
-                                            }
-                                        >
-                                            {priorityOptions.map((opt, i) => (
-                                                <option key={i} value={opt}>
-                                                {opt}
-                                                </option>
-                                            ))}
-                                        </Form.Select>
+                                        <Dropdown onSelect={(val) => handleTaskChange(index, "assignedTo", val)}>
+                                            <Dropdown.Toggle
+                                                variant="dark"
+                                                className="text-start"
+                                                style={{
+                                                    border: "1px solid #ccc",
+                                                    color: getUserColor(task.assignedTo),
+                                                }}
+                                            >
+                                                {task.assignedTo}
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className="bg-dark">
+                                                {teamMembers.map((member, i) => (
+                                                    <Dropdown.Item eventKey={member} key={i}>
+                                                        <span style={{ color: getUserColor(member) }}>
+                                                            {member}
+                                                        </span>
+                                                    </Dropdown.Item>
+                                                ))}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
                                     </td>
                                     <td>
-                                        <Form.Select
-                                            value={task.status}
-                                            onChange={(e) =>
-                                                handleTaskChange(index, "status", e.target.value)
-                                            }
-                                        >
-                                            {statusOptions.map((opt, i) => (
-                                                <option key={i} value={opt}>
-                                                    {opt}
-                                                </option>
-                                            ))}
-                                        </Form.Select>
+                                        <Dropdown onSelect={(val) => handleTaskChange(index, "priority", val)}>
+                                            <Dropdown.Toggle
+                                                variant="dark"
+                                                className="text-start"
+                                                style={{ border: "1px solid #ccc" }}
+                                            >
+                                                <Badge bg={getPriorityVariant(task.priority)}>{task.priority}</Badge>
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu className="bg-dark">
+                                                {priorityOptions.map((opt, i) => (
+                                                    <Dropdown.Item eventKey={opt} key={i}>
+                                                        <Badge bg={getPriorityVariant(opt)}>{opt}</Badge>
+                                                    </Dropdown.Item>
+                                                ))}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </td>
+                                    <td>
+                                        <Dropdown onSelect={(val) => handleTaskChange(index, "status", val)}>
+                                            <Dropdown.Toggle
+                                                variant="dark"
+                                                className="text-start"
+                                                style={{
+                                                    border: "1px solid #ccc",
+                                                    color: getStatusColor(task.status),
+                                                }}
+                                            >
+                                                {task.status}
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu className="bg-dark">
+                                                {statusOptions.map((status, i) => (
+                                                    <Dropdown.Item eventKey={status} key={i}>
+                                                        <span style={{ color: getStatusColor(status) }}>
+                                                            {status}
+                                                        </span>
+                                                    </Dropdown.Item>
+                                                ))}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
                                     </td>
                                     <td>
                                         <Button
-                                            variant="danger"
+                                            variant="outline-danger"
                                             size="sm"
-                                            className="rounded-pill calendar-dark"
                                             onClick={() => handleDeleteTask(task._id)}
                                         >
-                                            Delete
+                                            <FaTrash />
                                         </Button>
                                     </td>
                                 </tr>
                             ))}
                             </tbody>
                         </Table>
-                        </div>
                     ) : (
                         <div className="text-muted text-center mt-3 no-bg">No tasks added yet.</div>
                     )}

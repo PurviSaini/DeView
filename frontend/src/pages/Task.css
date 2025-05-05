@@ -57,3 +57,7 @@ div.task-container{
     display: inline-block !important;
     margin-top: 0;
   }  
+
+  .table-dark td {
+    background-color: #323232;
+  }
