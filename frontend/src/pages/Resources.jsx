@@ -1,6 +1,14 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import Loader from "../components/Loader";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Placeholder,
+} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Resources.css";
 import axios from "axios";
@@ -18,20 +26,16 @@ const getRandomColor = () => {
 export default function Resources() {
   const [messages, setMessages] = useState([]); // resource url saved on page
   const [input, setInput] = useState(""); // resource url inputted in the input box
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchResources = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           import.meta.env.VITE_BACKEND_URL + "/resources",
           { withCredentials: true }
         );
-        // if (Array.isArray(response.data)) {
-        //     setMessages(response.data); // Set messages if the response is an array
-        // } else {
-        //     // console.error('Unexpected response format:', response.data);
-        //     setMessages([]); // Fallback to an empty array
-        // }
         if (Array.isArray(response.data)) {
           const resourcesWithColors = response.data.map((msg) => ({
             ...msg,
@@ -42,6 +46,8 @@ export default function Resources() {
       } catch (error) {
         console.error("Error fetching resources:", error);
         setMessages([]); // Fallback to an empty array in case of an error
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -50,6 +56,7 @@ export default function Resources() {
 
   const handleSend = async () => {
     if (input.trim() !== "") {
+      setLoading(true);
       try {
         const color = getRandomColor();
         const response = await axios.post(
@@ -65,12 +72,15 @@ export default function Resources() {
         setInput("");
       } catch (error) {
         console.error("Error sending resource:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   const handleDelete = async (index) => {
     if (confirm("Are you sure you want to delete this resource?")) {
+      setLoading(true);
       try {
         await axios.delete(
           `${import.meta.env.VITE_BACKEND_URL}/resources/${index}`,
@@ -82,6 +92,8 @@ export default function Resources() {
         setMessages(updatedMessages);
       } catch (error) {
         console.error("Error deleting resource:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -90,6 +102,7 @@ export default function Resources() {
     <div>
       <Navbar title="Resources" />
       <Sidebar />
+
       <Container fluid className="d-flex flex-column p-3 resources-container">
         {/* Message Boxes */}
         <div className="flex-grow-1 overflow-auto mb-3">
@@ -121,6 +134,10 @@ export default function Resources() {
             <p className="text-center text-muted">No resources available.</p>
           )}
         </div>
+
+        {loading && 
+        <Loader message="Loading Messages" type="hourglass" />
+        }
 
         {/* Input and Send Button */}
         <Form className="resource-form">

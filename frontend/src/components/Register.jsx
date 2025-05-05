@@ -42,11 +42,9 @@ export default function Register() {
         <h2>DeView: Your Project, from Vision to Version</h2>
         <i>Track tasks, spark ideas, analyze code — all in one place.</i>
       </p>
-      {loading && (
-        <div className="loader-overlay">
-          <Loader message="Registerin User" spinner={true} />
-        </div>
-      )}
+
+      {loading && <Loader message="Registering User" type="hourglass" />}
+
       <form>
         <p id="heading">Register</p>
         {/* input for username */}
