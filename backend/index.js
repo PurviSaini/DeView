@@ -86,7 +86,6 @@ app.post('/signup', async (req, res) => {
         sameSite: 'None'
     });
       
-      // req.session.user = user;
       res.send({ message: "Login successful" , teamCode:user.teamCode});
     } catch (error) {
       res.status(500).send({ message: "Failed to login" });
@@ -490,6 +489,36 @@ app.get('/documentation', userAuth, async (req, res) => {
   } catch (error) {
     console.error('Error fetching documentation:', error);
     res.status(500).json({ error: 'Failed to fetch documentation' });
+  }
+});
+
+//get social media handles by username array
+app.post('/getSocialMediaHandles', userAuth, async (req, res) => {
+  const { usernames } = req.body;
+  try {
+    const socialMediaHandles = await Promise.all(usernames.map(async (username) => {
+      const user = await User.findOne({ username });
+      return user ? user.socialMediaHandles : null;
+    }));
+    res.json(socialMediaHandles);
+  } catch (error) {
+    console.error('Error fetching social media handles:', error);
+    res.status(500).json({ error: 'Failed to fetch social media handles' });
+  }
+});
+
+//patch user details- socila media handles
+app.patch('/userDetails', userAuth, async (req, res) => {
+  const { member } = req.body;
+  try {
+    const user = await User.findOne({ username: member.username });
+    user.socialMediaHandles = [member.github, member.linkedin, member.discord];
+    await user.save();
+    res.status(200).json({ message: 'User details updated successfully' });
+  }
+  catch (error) {
+    console.error('Error updating user details:', error);
+    res.status(500).json({ error: 'Failed to update user details' });
   }
 });
 

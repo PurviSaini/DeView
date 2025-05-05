@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import { Container, Row, Col, Card, Form, Button} from "react-bootstrap";
-import { FaGithub, FaLinkedin, FaDiscord, FaUser } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaDiscord, FaUser, FaRegWindowClose } from "react-icons/fa";
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import './TeamProfile.css';
@@ -13,44 +13,37 @@ const getRandomColor = () => {
 };
 
 const TeamProfile = () => {
-    const teamMembers = [
-        {
-          username: "member1",
-          github: "",
-          linkedin: "",
-          discord: "",
-        },
-        {
-          username: "alice",
-          github: "",
-          linkedin: "",
-          discord: "",
-        },
-        {
-          username: "Charlie",
-          github: "",
-          linkedin: "",
-          discord: "",
-        },
-        {
-          username: "Dolly",
-          github: "",
-          linkedin: "",
-          discord: "",
-        }
-    ];
-    
     const [membersData, setMembersData] = useState([]);
     const [avatarColors, setAvatarColors] = useState([]);
-    
+        
     useEffect(() => {
-        if (teamMembers.length > 0 && avatarColors.length === 0) {
-            const assignedColors = teamMembers.map(() => getRandomColor());
-            setAvatarColors(assignedColors);
-            setMembersData(teamMembers);
+        const fetchTeamMembers = async() => {
+            try{
+                const teamMembers = await axios.get(import.meta.env.VITE_BACKEND_URL + "/team",{withCredentials:true});
+                const socialMediaHandles = await axios.post(import.meta.env.VITE_BACKEND_URL + "/getSocialMediaHandles",{usernames:teamMembers.data.members}, {withCredentials:true});
+                
+                const teamDetails = socialMediaHandles.data.map((handle, index) => {
+                    return {
+                        username: teamMembers.data.members[index],
+                        github: handle[0] ? handle[0] : "https://github.com/user-name",
+                        linkedin: handle[1] ? handle[1] : "https://linkedin.com/in/user-name",
+                        discord: handle[2] ? handle[2] : "#abcd112",
+                       
+                    };
+                });
+            
+                setMembersData(teamDetails);
+                const assignedColors = teamMembers.data.members.map(() => getRandomColor());
+                setAvatarColors(assignedColors);
+
+            }catch(error){
+                console.log("Can't fetch the team Details",error)
+            }
+
         }
-    }, [teamMembers]);
-      
+        fetchTeamMembers();
+    },[]);
+    
     
     const handleChange = (index, field, value) => {
         const updatedMembers = [...membersData];
@@ -59,10 +52,12 @@ const TeamProfile = () => {
     };
     
     const handleMemberSave = (index) => {
-        const member = membersData[index];
-        console.log("Saving member data:", member);
-        alert(`Changes saved for ${member.username} (See console for data)`);
-        // Optional: Send member data to backend here
+        axios.patch(import.meta.env.VITE_BACKEND_URL + "/userDetails", {member:membersData[index]}, {withCredentials:true}).then(response => {
+            alert("changes saved successfully");
+        }).catch(error => {
+            console.error("Error updating member data:", error);
+        });
+        
     };
 
     return (
@@ -92,11 +87,11 @@ const TeamProfile = () => {
                                         >
                                             {member.username[0].toUpperCase()}
                                         </div>
-                                        <p className='text-start'><FaUser className="me-2 text-white" /> <strong>Username:</strong> <em>{member.username}</em></p>
+                                        <p className='text-center'><strong className='fs-2'>{member.username}</strong></p>
 
                                         <Form.Group className="mb-3 text-start">
                                             <Form.Label className="text-green border-0">
-                                                <FaGithub className="me-2" /> Github Username:
+                                                <FaGithub className="me-2" /> Github
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -109,7 +104,7 @@ const TeamProfile = () => {
 
                                         <Form.Group className="mb-3 text-start">
                                             <Form.Label className="text-blue border-0">
-                                                <FaLinkedin className="me-2" /> LinkedIn:
+                                                <FaLinkedin className="me-2" /> LinkedIn
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -122,7 +117,7 @@ const TeamProfile = () => {
 
                                         <Form.Group className="text-start">
                                             <Form.Label className="text-warning border-0">
-                                                <FaDiscord className="me-2" /> Discord ID:
+                                                <FaDiscord className="me-2" /> Discord
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
