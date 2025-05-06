@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import { useEffect,useState } from "react";
+import { useContext, useEffect,useState } from "react";
+import { SidebarContext } from "../context/SidebarContext";
 import ReactMarkdown from "react-markdown";
 import TextareaAutosize from "react-textarea-autosize";
 import { FaSave } from "react-icons/fa";
@@ -10,6 +11,7 @@ import "./Documentation.css";
 import axios from "axios";
 
 export default function Documentation() {
+   const { isCollapsed } = useContext(SidebarContext);
   const [markdown, setMarkdown] = useState(`## Inspiration
 What inspired you to build this project?
 ## What it does?
@@ -62,7 +64,7 @@ Define the future scope of the project.`);
     <div>
       <Navbar title="Documentation" />
       <Sidebar />
-      <div className="container py-4 doc-container">
+      <div className={`container py-4 doc-container ${isCollapsed ? "collapsed" : ""}`}>
         <div className="row">
           <div className="col-md-6 mb-3">
             <h3 className="mb-3 head">Markdown Editor</h3>

@@ -1,3 +1,12 @@
+div.task-container{
+    padding: 1rem;
+    margin-left: 7rem;
+    align-items: start;
+}
+.task-container.collapsed {
+margin-left: 3rem;
+}
+
 .bg-member-profile {
     background: linear-gradient(#2e3137, #89858d);
     border-radius: 15px;

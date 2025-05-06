@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { SidebarContext } from "../context/SidebarContext";
 import { Form, Button, Col, Row, Container, Card, Collapse } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
@@ -11,6 +12,7 @@ import "./Ideator.css";
 
 const Ideator = () => {
   const [loading, setLoading] = useState(false);
+  const { isCollapsed } = useContext(SidebarContext);
 
   const [formData, setFormData] = useState({
     theme: "",
@@ -126,7 +128,7 @@ const Ideator = () => {
     <div>
       <Navbar title="Ideator" />
       <Sidebar />
-      <div className="task-container p-3">
+      <div className={`task-container ${isCollapsed ? 'collapsed' : ''} p-3`}>
         <div className="wrapper-div p-1 m-3 ms-5 rounded-4">
           <Card className="p-4 bg-dark text-white rounded-4">
             <Card.Title className="text-center mb-4 display-6">

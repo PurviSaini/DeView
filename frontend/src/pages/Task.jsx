@@ -1,4 +1,5 @@
 import React, { useContext,useState,useEffect, useRef } from "react";
+import { SidebarContext } from '../context/SidebarContext';
 import { TaskContext } from '../context/TaskContext';
 import axios from 'axios';
 import { Form, Button, Card, Row, Col, Table, Modal, Dropdown, Badge, Placeholder } from "react-bootstrap";
@@ -11,6 +12,7 @@ import './Task.css'
 
 export default function Task(){
     const { tasks, setTasks } = useContext(TaskContext);
+    const { isCollapsed } = useContext(SidebarContext);
     const [loading, setLoading] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -251,7 +253,7 @@ export default function Task(){
         <div>
             <Navbar title="Tasks"/>
             <Sidebar/>
-            <div className="task-container">
+            <div className={`task-container ${isCollapsed ? 'collapsed' : ''}`}>
                 {/* Task Form */}
                 <Card className="p-4 m-5 form-bg-gradient text-light border-violet shadow-none" >
                     <h4 className="fw-bold mb-3">Add new Task:</h4>

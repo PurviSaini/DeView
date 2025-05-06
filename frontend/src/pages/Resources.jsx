@@ -12,7 +12,8 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Resources.css";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { SidebarContext } from "../context/SidebarContext";
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -24,6 +25,7 @@ const getRandomColor = () => {
 };
 
 export default function Resources() {
+  const { isCollapsed } = useContext(SidebarContext);
   const [messages, setMessages] = useState([]); // resource url saved on page
   const [input, setInput] = useState(""); // resource url inputted in the input box
   const [loading, setLoading] = useState(false);
@@ -97,7 +99,7 @@ export default function Resources() {
       <Navbar title="Resources" />
       <Sidebar />
 
-      <Container fluid className="d-flex flex-column p-3 resources-container">
+      <Container fluid className={`d-flex flex-column p-3 resources-container ${isCollapsed ? "collapsed" : ""}`}>
         {/* Message Boxes */}
         <div className="flex-grow-1 overflow-auto mb-3">
           {Array.isArray(messages) && messages.length > 0 ? (

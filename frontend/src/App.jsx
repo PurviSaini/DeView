@@ -5,7 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Team from './pages/Team';
 import Ideator from './pages/Ideator';
-import GitStats from './pages/GitStats';
+import GitStats from './pages/gitStats';
 import Resources from './pages/Resources';
 import Analytics from './pages/Analytics';
 import TeamProfile from './pages/TeamProfile';
