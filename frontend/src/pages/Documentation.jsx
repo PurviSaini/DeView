@@ -9,6 +9,8 @@ import { FaRegBookmark } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Documentation.css";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Documentation() {
    const { isCollapsed } = useContext(SidebarContext);
@@ -36,7 +38,7 @@ Define the future scope of the project.`);
       await axios.post(import.meta.env.VITE_BACKEND_URL+"/documentation", data,{
         withCredentials: true,
       });
-      alert("Project description saved successfully")
+      toast.success("Project description saved successfully")
     }catch(err){
       console.log(err);
     }
@@ -92,6 +94,9 @@ Define the future scope of the project.`);
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
+    
   );
+  
 }

@@ -3,6 +3,8 @@ import { Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Navbar({ title }){
     const navigate = useNavigate();
@@ -11,13 +13,13 @@ export default function Navbar({ title }){
         
         try{
             const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/logout",{},{withCredentials: true});
-            alert(res.data.message);
+            toast.success("You are logged out!");
             localStorage.removeItem('username');
             navigate("/");
         
        }
         catch(err){
-            alert("Can't Log out the user")
+            toast.error("Can't Log out the user")
             console.log(err);
         }
     }
@@ -38,11 +40,11 @@ export default function Navbar({ title }){
 
       <Dropdown.Menu>
         {/* <Dropdown.Item href="#/action-1">User Profile</Dropdown.Item> */}
-        <Dropdown.Item href="#/action-2" onClick={handleLogout}>Log out</Dropdown.Item>
         <Dropdown.Item href="#" onClick={handleTeamView}>View Team Profile</Dropdown.Item>
+        <Dropdown.Item href="#/action-2" onClick={handleLogout}>Log out</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
-      
+      <ToastContainer />
         </nav>
     )
 }

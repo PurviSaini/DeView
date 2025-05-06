@@ -3,6 +3,9 @@ import { useState } from "react";
 import axios from "axios";
 import "./Login.css";
 import Loader from "./Loader";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Toast } from "react-bootstrap";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -24,7 +27,6 @@ export default function Login() {
         },
         { withCredentials: true }
       );
-      // alert(res.data.message);
       localStorage.setItem("username", username);
       const teamCode = res.data.teamCode;
       if (teamCode) {
@@ -33,7 +35,7 @@ export default function Login() {
         navigate("/team");
       }
     } catch (err) {
-      alert("Can't Login! Invalid Credentials.");
+      toast.error("Can't Login! Invalid Credentials.");
       console.log(err);
     } finally {
       setLoading(false);
@@ -93,6 +95,7 @@ export default function Login() {
           </NavLink>
         </p>
       </form>
+      <ToastContainer />
     </div>
   );
 }

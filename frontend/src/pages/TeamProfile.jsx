@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { SidebarContext } from "../context/SidebarContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import {
@@ -93,7 +95,7 @@ const TeamProfile = () => {
         { withCredentials: true }
       )
       .then((response) => {
-        alert("changes saved successfully");
+        toast.success("Changes saved successfully");
       })
       .catch((error) => {
         console.error("Error updating member data:", error);
@@ -224,6 +226,7 @@ const TeamProfile = () => {
           ))}
         </Row>
       </div>
+      <ToastContainer />
     </div>
   );
 };

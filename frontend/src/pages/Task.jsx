@@ -9,6 +9,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/Sidebar"
 import './Task.css'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Task(){
     const { tasks, setTasks } = useContext(TaskContext);
@@ -113,7 +115,7 @@ export default function Task(){
         const newTask = {
             ...formData,
         };
-        console.log(newTask);
+        // console.log(newTask);
         try {
             const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/tasks", newTask,{
                 withCredentials: true,
@@ -128,9 +130,9 @@ export default function Task(){
                 desc:"",
             });
             setOpenForm(false);
-            alert("Task added successfully!");
+            toast.success("Task added successfully!");
         } catch (err) {
-            alert("Failed to add task");
+            toast.error("Failed to add task");
             console.error(err);
         }
     };
@@ -153,22 +155,23 @@ export default function Task(){
             );
             // console.log(`Task ${taskId} field '${field}' updated to '${value}'`);
         } catch (err) {
-            alert("Failed to update task field");
+            toast.error("Failed to update task field");
             console.error(err);
         }
     };
 
     const handleDeleteTask = async (taskId) => {
-        if(confirm("Are you sure you want to delete this task?")){
+        if(toast.confirm("Are you sure you want to delete this task?")){
             try {
             await axios.delete(import.meta.env.VITE_BACKEND_URL+ "/tasks" + `/${taskId}`,{
                 withCredentials: true,
             });
             const updatedTasks = tasks.filter((task) => task._id !== taskId);
             setTasks(updatedTasks);
+            toast.success("Task deleted successfully!");
             } catch (err) {
             console.error("Failed to delete task", err);
-            alert("Error deleting task");
+            toast.error("Error deleting task");
             }
         }
     };
@@ -613,6 +616,7 @@ export default function Task(){
                         </Modal>
                     </div>
                 )}
+                <ToastContainer />
             </div>
         </div>
     )

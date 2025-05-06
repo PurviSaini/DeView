@@ -7,6 +7,8 @@ import './Team.css';
 import team2 from "../assets/team2.png";
 import jointeam from '../assets/jointeam.png';
 import Navbar from '../components/Navbar'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Team = () => {
     const navigate = useNavigate();
@@ -25,12 +27,12 @@ const Team = () => {
                 teamCode: teamCode.trim(),
             },{withCredentials: true});
     
-            alert(`Joined team successfully!`);
+            toast.success(`Joined team successfully!`);
             setShowAlert(false);
             navigate('/task');
         } catch (error) {
             console.error('Error joining team:', error);
-            alert('Failed to join team. Please check the code.');
+            toast.error('Failed to join team. Please check the code.');
         }
     };
 
@@ -46,7 +48,7 @@ const Team = () => {
     const handleCreateTeam = () => {
         const generatedCode = generateTeamCode();
         navigator.clipboard.writeText(generatedCode);
-        alert(`Team created! Code copied: ${generatedCode}`);
+        toast.success(`Team created! Code copied: ${generatedCode}`);
         setInputValue(generatedCode);
     };
 
@@ -110,6 +112,7 @@ const Team = () => {
                 </Col>
             </Row>
         </Container>
+      <ToastContainer />
     </div>
   );
 };

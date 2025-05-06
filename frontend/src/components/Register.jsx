@@ -5,6 +5,8 @@ import Loader from "./Loader";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -27,10 +29,10 @@ export default function Register() {
           password: password,
         }
       );
-      alert(res.data.message);
+      toast.success("You are registered successfully!");
       navigate("/");
     } catch (err) {
-      alert("Can't Register the user");
+      toast.error("Can't Register the user");
       console.log(err);
     } finally {
       setLoading(false);
@@ -106,6 +108,7 @@ export default function Register() {
           </NavLink>
         </p>
       </form>
+      <ToastContainer />
     </div>
   );
 }

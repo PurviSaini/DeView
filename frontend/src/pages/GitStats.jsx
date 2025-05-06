@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "../context/SidebarContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Form,
   Card,
@@ -59,7 +61,7 @@ const GitStats = () => {
       setStats(response.data);
     } catch (error) {
       console.error("Error fetching repo stats from backend:", error);
-      alert("Failed to fetch repo stats from backend.");
+      toast.error("Failed to fetch repo stats from backend.");
     } finally {
       setLoading(false);
     }
@@ -97,11 +99,11 @@ const GitStats = () => {
         }
       );
       setRepoUrl(repoUrl);
-      alert("Repo url saved to db");
+      toast.success("Github Repository URL saved successfully!");
       fetchStats(); // Fetch stats after setting the repo URL
     } catch (error) {
       console.error("Error saving repo url to db:", error);
-      alert("Failed to save repo url to db.");
+      toast.error("Failed to save repo url to db.");
     } finally {
       setLoading(false);
     }
@@ -336,6 +338,7 @@ const GitStats = () => {
             </Card>
         </Container>
       </div>
+      <ToastContainer />
     </div>
   );
 };

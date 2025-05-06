@@ -9,6 +9,8 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Loader from "../components/Loader";
 import "./Ideator.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Ideator = () => {
   const [loading, setLoading] = useState(false);
@@ -96,7 +98,7 @@ const Ideator = () => {
       setOpenForm(false);
     } catch (error) {
       console.error("Error submitting to backend:", error);
-      alert("Failed to submit or generate idea.");
+      toast.error("Failed to submit or generate idea.");
     } finally {
       setLoading(false); // stop loader
     }
@@ -112,10 +114,10 @@ const Ideator = () => {
         setSubmittedData((prev) =>
           prev.filter((_, index) => index !== indexToDelete)
         );
-        alert("Idea deleted successfully!");
+        toast.success("Idea deleted successfully!");
       } catch (error) {
         console.error("Error deleting idea from DB:", error);
-        alert("Failed to delete idea.");
+        toast.error("Failed to delete idea.");
       }
     }
   };
@@ -405,8 +407,10 @@ const Ideator = () => {
           </>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
+  
 };
 
 export default Ideator;
