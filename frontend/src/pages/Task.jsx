@@ -1,7 +1,7 @@
 import React, { useContext,useState,useEffect, useRef } from "react";
 import { TaskContext } from '../context/TaskContext';
 import axios from 'axios';
-import { Form, Button, Card, Row, Col, Table, Modal, Dropdown, Badge } from "react-bootstrap";
+import { Form, Button, Card, Row, Col, Table, Modal, Dropdown, Badge, Placeholder } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -11,6 +11,7 @@ import './Task.css'
 
 export default function Task(){
     const { tasks, setTasks } = useContext(TaskContext);
+    const [loading, setLoading] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [teamMembers, setTeamMembers] = useState([]);
@@ -25,6 +26,7 @@ export default function Task(){
 
   useEffect(() => {
     const fetchTasks = async () => {
+        setLoading(true);
         try {
           const res = await axios.get(import.meta.env.VITE_BACKEND_URL+ "/tasks", {
             withCredentials: true,
@@ -32,6 +34,8 @@ export default function Task(){
           setTasks(res.data.tasks || []);
         } catch (err) {
           console.error("Failed to fetch tasks", err);
+        } finally {
+            setLoading(false);
         }
       };
     const fetchTeamMembers = async () => {
@@ -423,7 +427,32 @@ export default function Task(){
                             <option value="dueDateRecent">Due Date (Most Recent First)</option>
                         </Form.Select>
                     </div>
-                    {displayedTasks.length > 0 ? (
+                    {loading ? (
+        <Table variant="dark" responsive bordered hover className="mt-3 text-center">
+          <thead className="table-dark">
+            <tr>
+              <th style={{ width: "30%" }}>Title</th>
+              <th>Due Date</th>
+              <th>Assigned To</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <tr key={index}>
+                <td><Placeholder animation="glow"><Placeholder xs={8} /></Placeholder></td>
+                <td><Placeholder animation="glow"><Placeholder xs={6} /></Placeholder></td>
+                <td><Placeholder animation="glow"><Placeholder xs={7} /></Placeholder></td>
+                <td><Placeholder animation="glow"><Placeholder xs={5} /></Placeholder></td>
+                <td><Placeholder animation="glow"><Placeholder xs={5} /></Placeholder></td>
+                <td><Placeholder.Button variant="danger" xs={4} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : displayedTasks.length > 0 ? (
                         <Table variant="dark" responsive bordered hover className="mt-3 text-center" style={{wordWrap: "break-word"}}>
                             <thead className="table-dark">
                                 <tr>

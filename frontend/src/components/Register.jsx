@@ -43,9 +43,9 @@ export default function Register() {
         <i>Track tasks, spark ideas, analyze code — all in one place.</i>
       </p>
 
-      {loading && <Loader message="Registering User" type="hourglass" />}
+      {loading && <Loader message="Almost done! Creating you account" type="hourglass" />}
 
-      <form>
+      <form className={`log_register ${loading ? "blurred" : ""}`}>
         <p id="heading">Register</p>
         {/* input for username */}
         <label htmlFor="username">

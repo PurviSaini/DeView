@@ -56,7 +56,6 @@ export default function Resources() {
 
   const handleSend = async () => {
     if (input.trim() !== "") {
-      setLoading(true);
       try {
         const color = getRandomColor();
         const response = await axios.post(
@@ -72,15 +71,12 @@ export default function Resources() {
         setInput("");
       } catch (error) {
         console.error("Error sending resource:", error);
-      } finally {
-        setLoading(false);
       }
     }
   };
 
   const handleDelete = async (index) => {
     if (confirm("Are you sure you want to delete this resource?")) {
-      setLoading(true);
       try {
         await axios.delete(
           `${import.meta.env.VITE_BACKEND_URL}/resources/${index}`,
@@ -92,8 +88,6 @@ export default function Resources() {
         setMessages(updatedMessages);
       } catch (error) {
         console.error("Error deleting resource:", error);
-      } finally {
-        setLoading(false);
       }
     }
   };

@@ -349,41 +349,39 @@ const Ideator = () => {
 
         {/* {loading && <Loader />} */}
         {/* <Loader message="Submitting your idea"/> */}
-        {loading ? (
-            <Loader message="Submitting your idea" type="boxes"/>
-        ) : (
-          <>
-            {submittedData.length > 0 && ( //change start
-              <>
-                <h4 className="text-center my-4 text-white">Submitted Ideas</h4>
 
-                {submittedData.map((data, index) => (
-                  <Card
-                    key={data._id || index}
-                    className="p-4 m-5 wrapper-div rounded-4 text-start"
-                  >
-                    {data.generatedIdea && (
-                      <div className="d-flex justify-content-between align-items-start">
-                        <p className="generated-idea mb-2">
-                          <strong>Generated Project Idea:</strong>
-                          <br />
-                          <ReactMarkdown>{data.generatedIdea}</ReactMarkdown>
-                        </p>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => handleDeleteIdea(index, data._id)}
-                          className="ms-3"
-                          title="Delete Idea"
-                        >
-                          <FaTrash />
-                        </Button>
-                      </div>
-                    )}
-                  </Card>
-                ))}
-              </>
-            )}
+        {loading && <Loader message="Just few more seconds, and your idea will be ready" type="boxes" />}
+        {/* or message="Almost there! Crafting your idea..." */}
+
+        {submittedData.length > 0 && ( //change start
+          <>
+            <h4 className="text-center my-4 text-white">Submitted Ideas</h4>
+
+            {submittedData.map((data, index) => (
+              <Card
+                key={data._id || index}
+                className="p-4 m-5 wrapper-div rounded-4 text-start"
+              >
+                {data.generatedIdea && (
+                  <div className="d-flex justify-content-between align-items-start">
+                    <p className="generated-idea mb-2">
+                      <strong>Generated Project Idea:</strong>
+                      <br />
+                      <ReactMarkdown>{data.generatedIdea}</ReactMarkdown>
+                    </p>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleDeleteIdea(index, data._id)}
+                      className="ms-3"
+                      title="Delete Idea"
+                    >
+                      <FaTrash />
+                    </Button>
+                  </div>
+                )}
+              </Card>
+            ))}
           </>
         )}
       </div>
