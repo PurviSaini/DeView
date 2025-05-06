@@ -161,7 +161,7 @@ export default function Task(){
     };
 
     const handleDeleteTask = async (taskId) => {
-        if(toast.confirm("Are you sure you want to delete this task?")){
+        if(confirm("Are you sure you want to delete this task?")){
             try {
             await axios.delete(import.meta.env.VITE_BACKEND_URL+ "/tasks" + `/${taskId}`,{
                 withCredentials: true,
