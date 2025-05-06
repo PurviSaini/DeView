@@ -13,6 +13,7 @@ const Team = () => {
     const [inputValue, setInputValue] = useState('');
     const [teamCode, setTeamCode] = useState('');
     const [showAlert, setShowAlert] = useState(false);
+    
     const handleJoinTeam = async (e) => {
         e.preventDefault();
         if (!teamCode) {

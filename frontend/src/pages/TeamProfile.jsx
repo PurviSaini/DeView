@@ -5,6 +5,7 @@ import { Container, Row, Col, Card, Form, Button} from "react-bootstrap";
 import { FaGithub, FaLinkedin, FaDiscord, FaUser, FaRegWindowClose } from "react-icons/fa";
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import Loader from '../components/Loader';
 import './TeamProfile.css';
 
 const getRandomColor = () => {
@@ -15,9 +16,11 @@ const getRandomColor = () => {
 const TeamProfile = () => {
     const [membersData, setMembersData] = useState([]);
     const [avatarColors, setAvatarColors] = useState([]);
+    const [loading, setLoading] = useState(false);
         
     useEffect(() => {
         const fetchTeamMembers = async() => {
+            setLoading(true);
             try{
                 const teamMembers = await axios.get(import.meta.env.VITE_BACKEND_URL + "/team",{withCredentials:true});
                 const socialMediaHandles = await axios.post(import.meta.env.VITE_BACKEND_URL + "/getSocialMediaHandles",{usernames:teamMembers.data.members}, {withCredentials:true});
@@ -38,6 +41,8 @@ const TeamProfile = () => {
 
             }catch(error){
                 console.log("Can't fetch the team Details",error)
+            } finally {
+                setLoading(false);
             }
 
         }
@@ -64,6 +69,9 @@ const TeamProfile = () => {
         <div>
             <Navbar title="Team Profile"/>
             <Sidebar />
+
+            {loading && <Loader message='Hang tight! Getting your team together' type="hourglass"/>}
+
             <div className="task-container p-5">
                 <Row className="justify-content-center m-1">
                     {membersData.map((member, idx) => (

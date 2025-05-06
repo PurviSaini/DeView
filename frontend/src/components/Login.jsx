@@ -46,7 +46,7 @@ export default function Login() {
         <i>Track tasks, spark ideas, analyze code — all in one place.</i>
       </p>
       
-      {loading && <Loader message="Loggin In" type="hourglass" />
+      {loading && <Loader message="Hang Tight! We're almost there" type="hourglass" />
       }
       <form className={`log_register ${loading ? "blurred" : ""}`} action="/">
         <p id="heading">Log In</p>
