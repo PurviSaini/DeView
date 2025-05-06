@@ -10,6 +10,10 @@ div.task-container{
     text-align: center;
 }
 
+.task-container.collapsed {
+  margin-left: 3rem;
+}
+
 .form-bg-gradient {
     background: radial-gradient(circle, #2e3137, #89858d);
   }

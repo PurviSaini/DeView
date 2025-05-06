@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { TaskContext } from '../context/TaskContext';
+import { SidebarContext } from '../context/SidebarContext';
 import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -7,6 +8,7 @@ import './Analytics.css';
 
 const Analytics = () => {
     const { tasks } = useContext(TaskContext);
+    const { isCollapsed } = useContext(SidebarContext);
 
     // Get unique team members from tasks
     const teamMembers = [...new Set(tasks.map((task) => task.assignedTo))];
@@ -15,7 +17,7 @@ const Analytics = () => {
         <div>
             <Navbar title="Analytics Dashboard" />
             <Sidebar />
-            <div className="analytics-container">
+            <div className={`analytics-container ${isCollapsed ? "collapsed" : ""}`}>
                 {/* Task Allocation Pie Chart */}
                 <div className="chart-container pie-chart">
                     <h3>Task Allocation</h3>

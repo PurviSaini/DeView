@@ -18,6 +18,10 @@ div.task-container {
     margin-left: 9rem; /* Ensure graphs start after the sidebar */
 }
 
+.analytics-container.collapsed {
+    margin-left: 5rem;
+}
+
 .chart-container {
     background-color: #1e1e2f;
     color: white;

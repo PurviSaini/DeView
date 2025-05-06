@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { SidebarContext } from "../context/SidebarContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
@@ -14,20 +15,21 @@ import Sidebar from "../components/Sidebar";
 import Loader from "../components/Loader";
 import "./TeamProfile.css";
 
-const getRandomColor = () => {
-  const colors = [
-    "#00aabc",
-    "#e67e22",
-    "#2ecc71",
-    "#9b59b6",
-    "#f39c12",
-    "#e74c3c",
-    "#1abc9c",
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-};
+// const getRandomColor = () => {
+//   const colors = [
+//     "#00aabc",
+//     "#e67e22",
+//     "#2ecc71",
+//     "#9b59b6",
+//     "#f39c12",
+//     "#e74c3c",
+//     "#1abc9c",
+//   ];
+//   return colors[Math.floor(Math.random() * colors.length)];
+// };
 
 const TeamProfile = () => {
+    const { isCollapsed } = useContext(SidebarContext);
   const [membersData, setMembersData] = useState([]);
   const [avatarColors, setAvatarColors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,8 +60,14 @@ const TeamProfile = () => {
         });
 
         setMembersData(teamDetails);
-        const assignedColors = teamMembers.data.members.map(() =>
-          getRandomColor()
+
+        const getUserColor = (username) => {
+            const fixedColors = ['#e73cbf', '#a812f3', '#3498db', '#1abc9c'];
+            const index = teamMembers.data.members.indexOf(username);
+            return fixedColors[index % fixedColors.length];
+        };  
+        const assignedColors = teamMembers.data.members.map((_, i) =>
+          getUserColor(teamMembers.data.members[i])
         );
         setAvatarColors(assignedColors);
       } catch (error) {
@@ -104,7 +112,7 @@ const TeamProfile = () => {
         />
       )}
 
-      <div className="task-container p-5">
+      <div className={`task-container ${isCollapsed ? "collapsed" : ""} p-5`}>
         <Row className="justify-content-center m-1">
           {membersData.map((member, idx) => (
             <Col key={idx} md={3} sm={6} xs={12} className="">

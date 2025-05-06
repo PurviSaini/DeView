@@ -9,6 +9,9 @@ div.task-container{
         margin-left: 7rem;
         align-items: start;
 }
+.task-container.collapsed {
+  margin-left: 3rem;
+}
 
 .dark-input {
     background-color: #0d1117;

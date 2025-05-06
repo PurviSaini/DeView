@@ -1,4 +1,5 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { SidebarContext } from "../context/SidebarContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Form,
@@ -29,6 +30,7 @@ import Loader from "../components/Loader";
 import "./GitStats.css";
 
 const GitStats = () => {
+  const { isCollapsed } = useContext(SidebarContext);
   const [loading, setLoading] = useState(false);
   const [repoUrl, setRepoUrl] = useState("");
   const [stats, setStats] = useState({
@@ -108,7 +110,7 @@ const GitStats = () => {
     <div>
       <Navbar title="Github Stats" />
       <Sidebar />
-      <div className="task-container p-3">
+      <div className={`task-container ${isCollapsed ? "collapsed" : ""} p-3`}>
         {loading ? (
           <Placeholder as="h1" animation="glow">
             <Placeholder xs={6} />

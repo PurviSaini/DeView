@@ -1,6 +1,10 @@
 div.doc-container{
-    margin-left: 13.4rem;
+    margin-left: 12rem;
     padding: 0;
+}
+
+.doc-container.collapsed {
+    margin-left: 8rem;
 }
 
 div.preview-container{
