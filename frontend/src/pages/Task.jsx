@@ -2,8 +2,8 @@ import React, { useContext,useState,useEffect, useRef } from "react";
 import { SidebarContext } from '../context/SidebarContext';
 import { TaskContext } from '../context/TaskContext';
 import axios from 'axios';
-import { Form, Button, Card, Row, Col, Table, Modal, Dropdown, Badge, Placeholder } from "react-bootstrap";
-import { FaTrash } from "react-icons/fa";
+import { Form, Button, Card, Row, Col, Table, Modal, Dropdown, Badge, Placeholder, Collapse } from "react-bootstrap";
+import { FaTrash, FaPlus, FaChevronUp } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Navbar from "../components/Navbar"
@@ -25,6 +25,7 @@ export default function Task(){
     const [sortOption, setSortOption] = useState("");
     const filterDropdownRef = useRef();
     const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+    const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -126,6 +127,7 @@ export default function Task(){
                 priority:"",
                 desc:"",
             });
+            setOpenForm(false);
             alert("Task added successfully!");
         } catch (err) {
             alert("Failed to add task");
@@ -256,7 +258,27 @@ export default function Task(){
             <div className={`task-container ${isCollapsed ? 'collapsed' : ''}`}>
                 {/* Task Form */}
                 <Card className="p-4 m-5 form-bg-gradient text-light border-violet shadow-none" >
-                    <h4 className="fw-bold mb-3">Add new Task:</h4>
+                <h4 
+                    className="fw-bold mb-3" 
+                    style={{ cursor: 'pointer' }} 
+                    onClick={() => setOpenForm(!openForm)}
+                    aria-controls="task-collapse-form"
+                    aria-expanded={openForm}
+                >
+                    {openForm ? (
+                        <>
+                            <FaChevronUp className="me-2" />
+                        </>
+                    ) : (
+                        <>
+                            <FaPlus className="me-2" />
+                            Add New Task
+                        </>
+                    )}
+                </h4>
+
+                <Collapse in={openForm}>
+                    <div id="task-collapse-form" className="bg-none">
                     <Form className="m-0 p-3 border-0 shadow-none" onSubmit={handleSubmit}>
                         <Row className="mb-3 no-bg">
                             <Col md={4}  className="no-bg">
@@ -347,6 +369,8 @@ export default function Task(){
                             </Button>
                         </div>
                     </Form>
+                    </div>
+                    </Collapse>
                 </Card>
 
                 {/* Task Table */}
