@@ -1,8 +1,9 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import { TaskContext } from '../context/TaskContext';
 import { SidebarContext } from '../context/SidebarContext';
 import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import './Analytics.css';
 
@@ -10,8 +11,34 @@ const Analytics = () => {
     const { tasks } = useContext(TaskContext);
     const { isCollapsed } = useContext(SidebarContext);
   const [selectedMember, setSelectedMember] = useState("All");
+
+
     // Get unique team members from tasks
     const teamMembers = [...new Set(tasks.map((task) => task.assignedTo))];
+    const [heatmapData, setHeatmapData] = useState([]);
+
+
+        // Fetch commit data from the backend
+    useEffect(() => {
+        const fetchAndProcessData = async () => {
+            try {
+                // Fetch commit data from the backend
+                const response = await axios.get(import.meta.env.VITE_BACKEND_URL+"/commits",{withCredentials: true});
+                const commits = response.data;
+                console.log("Fetched commit data:", commits);
+                // Process commit data for the heatmap
+                // const processedData
+                //setHeatmapData(processedData);
+               
+
+            } catch (error) {
+                console.error("Error fetching commit data:", error);
+            }
+        };
+
+        fetchAndProcessData();
+    }, []);
+   
 
     return (
         <div>
@@ -46,9 +73,10 @@ const Analytics = () => {
                 </div>
 
                 {/* Heatmap Placeholder */}
-                <div className="chart-container heatmap">
-                    <h3>Heatmap</h3>
-                    <div className="heatmap-placeholder">Heatmap Placeholder</div>
+               <div className="chart-container heatmap">
+                    <h3>Commit Heatmap</h3>
+                  { console.log(heatmapData)}
+        
                 </div>
 
                 {/* Personal Tasks */}
