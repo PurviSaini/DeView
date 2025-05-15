@@ -525,10 +525,10 @@ app.patch('/userDetails', userAuth, async (req, res) => {
 // Fetch commit data from GitHub API
 app.get("/commits", userAuth, async (req, res) => {
     try {
-       const teamCode = req.user.teamCode;
-       const team = await Team.findOne({ teamCode });
-       const repoUrl = team.gitRepoUrl;
-       const { owner, repo } = extractRepoInfo(repoUrl);
+      const teamCode = req.user.teamCode;
+      const team = await Team.findOne({ teamCode });
+      const repoUrl = team.gitRepoUrl;
+      const { owner, repo } = extractRepoInfo(repoUrl);
         // const response = await (axiosInstance(`https://api.github.com/repos/${owner}/${repo}/commits`));
 
         // // Map the data to extract author and timestamp
@@ -537,36 +537,58 @@ app.get("/commits", userAuth, async (req, res) => {
         //     timestamp: commit.commit.author.date,
         // }));
 
-        let allCommits = [];
-        let page = 1;
-        let hasMore = true;
+      let allCommits = [];
+      let page = 1;
+      let hasMore = true;
 
-        while (hasMore) {
-          const response = await axiosInstance.get(
-            `https://api.github.com/repos/${owner}/${repo}/commits`,
-            {
-              params: {
-                per_page: 100,
-                page: page,
-              },
-            }
-          );
-        
-          const commits = response.data.map((commit) => ({
-            author: commit.commit.author.name,
-            timestamp: commit.commit.author.date,
-          }));
-        
-          allCommits = [...allCommits, ...commits];
-        
-          if (response.data.length < 100) {
-            hasMore = false; // No more pages
-          } else {
-            page++;
+      while (hasMore) {
+        const response = await axiosInstance.get(
+          `https://api.github.com/repos/${owner}/${repo}/commits`,
+          {
+            params: {
+              per_page: 100,
+              page: page,
+            },
           }
+        );
+        
+        const commits = response.data.map((commit) => ({
+          author: commit.author?.login || commit.commit.author.name,
+          timestamp: commit.commit.author.date,
+        }));
+      
+        allCommits = [...allCommits, ...commits];
+        
+        if (response.data.length < 100) {
+          hasMore = false; // No more pages
+        } else {
+          page++;
+        }
+      }
+
+        // res.status(200).json(allCommits);
+      const heatmapData = {};
+
+      allCommits.forEach(({ author, timestamp }) => {
+        const date = new Date(timestamp);
+        const hour = date.getHours();
+
+        if (!heatmapData[author]) {
+          heatmapData[author] = Array(24).fill(0);
         }
 
-        res.status(200).json(allCommits);
+        heatmapData[author][hour]++;
+      });
+
+      // Format for frontend
+      const formatted = [];
+      Object.entries(heatmapData).forEach(([author, hours]) => {
+        hours.forEach((count, hour) => {
+          formatted.push({ author, hour, count });
+        });
+      });
+
+      res.status(200).json(formatted);
     } catch (error) {
         console.error("Error fetching commits:", error);
         res.status(500).json({ error: "Failed to fetch commit data" });
