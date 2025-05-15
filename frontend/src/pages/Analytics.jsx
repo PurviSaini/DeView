@@ -1,7 +1,7 @@
 import React, { useState,useContext, useEffect } from 'react';
 import { TaskContext } from '../context/TaskContext';
 import { SidebarContext } from '../context/SidebarContext';
-import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis } from 'recharts';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar';
@@ -28,7 +28,7 @@ const Analytics = () => {
                 console.log("Fetched commit data:", commits);
                 // Process commit data for the heatmap
                 // const processedData
-                //setHeatmapData(processedData);
+                setHeatmapData(commits);
                
 
             } catch (error) {
@@ -39,6 +39,17 @@ const Analytics = () => {
         fetchAndProcessData();
     }, []);
    
+    const uniqueAuthors = [...new Set(heatmapData.map(d => d.author))];
+    console.log(uniqueAuthors);
+
+    const getColor = (count) => {
+        if (count === 0) return "#ffe6eb";
+        if (count <= 2) return "#ffb3bf";
+        if (count <= 5) return "#ff6680";
+        if (count <= 10) return "#c94255";
+        return "#8b2036";
+      };      
+  
 
     return (
         <div>
@@ -73,9 +84,45 @@ const Analytics = () => {
                 </div>
 
                 {/* Heatmap Placeholder */}
-               <div className="chart-container heatmap">
-                    <h3>Commit Heatmap</h3>
-                  { console.log(heatmapData)}
+                <div className="chart-container heatmap">
+                    <h3 className='mb-5'>Commit Heatmap</h3>
+                    <ScatterChart
+                        margin={{ top: 20, right: 20, bottom: 20, left: 50 }}
+                        width={800} height={200} 
+                    >
+                        <XAxis
+                            type="number"
+                            dataKey="hour"
+                            name="Hour"
+                            domain={[0, 23]}
+                            tickCount={24}
+                            label={{ value: "Hour of Day", position: "insideBottom", offset: -10 }}
+                        />
+                        <YAxis
+                            type="category"
+                            dataKey="author"
+                            name="Contributor"
+                            allowDuplicatedCategory={false}
+                            label={{ value: "Contributor", angle: -90, position: "insideLeft" }}
+                        />
+                        <ZAxis type="number" dataKey="count" range={[10,60]}/>
+                        <Tooltip/>
+                        <Scatter
+                            data={heatmapData}
+                            shape={(props) => (
+                                <rect
+                                    x={props.cx}
+                                    y={props.cy - 10}
+                                    width={20}
+                                    height={20}
+                                    fill={getColor(props.payload.count)}
+                                    stroke="#ccc"
+                                    strokeWidth={0.5}
+                                    rx={2}
+                                />
+                            )}
+                        />
+                    </ScatterChart>
         
                 </div>
 
