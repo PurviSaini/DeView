@@ -529,15 +529,44 @@ app.get("/commits", userAuth, async (req, res) => {
        const team = await Team.findOne({ teamCode });
        const repoUrl = team.gitRepoUrl;
        const { owner, repo } = extractRepoInfo(repoUrl);
-        const response = await (axiosInstance(`https://api.github.com/repos/${owner}/${repo}/commits`));
+        // const response = await (axiosInstance(`https://api.github.com/repos/${owner}/${repo}/commits`));
 
-        // Map the data to extract author and timestamp
-        const commits = response.data.map((commit) => ({
+        // // Map the data to extract author and timestamp
+        // const commits = response.data.map((commit) => ({
+        //     author: commit.commit.author.name,
+        //     timestamp: commit.commit.author.date,
+        // }));
+
+        let allCommits = [];
+        let page = 1;
+        let hasMore = true;
+
+        while (hasMore) {
+          const response = await axiosInstance.get(
+            `https://api.github.com/repos/${owner}/${repo}/commits`,
+            {
+              params: {
+                per_page: 100,
+                page: page,
+              },
+            }
+          );
+        
+          const commits = response.data.map((commit) => ({
             author: commit.commit.author.name,
             timestamp: commit.commit.author.date,
-        }));
+          }));
+        
+          allCommits = [...allCommits, ...commits];
+        
+          if (response.data.length < 100) {
+            hasMore = false; // No more pages
+          } else {
+            page++;
+          }
+        }
 
-        res.status(200).json(commits);
+        res.status(200).json(allCommits);
     } catch (error) {
         console.error("Error fetching commits:", error);
         res.status(500).json({ error: "Failed to fetch commit data" });
