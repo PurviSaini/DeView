@@ -37,9 +37,9 @@ export default function Navbar({ title }){
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {/* <Dropdown.Item href="#/action-1">User Profile</Dropdown.Item> */}
-        <Dropdown.Item href="#" onClick={handleTeamView}>View Team Profile</Dropdown.Item>
-        <Dropdown.Item href="#/action-2" onClick={handleLogout}>Log out</Dropdown.Item>
+        <Dropdown.Item href="#" className='text-primary'>📍{localStorage.getItem("username")}</Dropdown.Item>
+        <Dropdown.Item href="#" onClick={handleTeamView} className='bg-info'>🏠︎ Team Profile</Dropdown.Item>
+        <Dropdown.Item href="#/action-2" onClick={handleLogout} className='text-danger'> ⏻ Log out</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
         </nav>
