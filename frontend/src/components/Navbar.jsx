@@ -1,5 +1,6 @@
 import './Navbar.css'
 import { Dropdown } from 'react-bootstrap';
+import { RiShutDownLine } from "react-icons/ri";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +40,7 @@ export default function Navbar({ title }){
       <Dropdown.Menu>
         <Dropdown.Item href="#" className='text-primary'>📍{localStorage.getItem("username")}</Dropdown.Item>
         <Dropdown.Item href="#" onClick={handleTeamView} className='bg-info'>🏠︎ Team Profile</Dropdown.Item>
-        <Dropdown.Item href="#/action-2" onClick={handleLogout} className='text-danger'> ⏻ Log out</Dropdown.Item>
+        <Dropdown.Item href="#/action-2" onClick={handleLogout} className='text-danger'> <RiShutDownLine /> Log out</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
         </nav>

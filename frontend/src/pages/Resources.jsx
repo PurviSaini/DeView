@@ -123,7 +123,7 @@ export default function Resources() {
                 </button>
 
                 {/* Message Content */}
-                <div className="mt-4">{msg.message}</div>
+                <div className="mt-4" style={{ whiteSpace: 'pre-line' }}>{msg.message}</div>
               </div>
             ))
           ) : (
@@ -140,16 +140,11 @@ export default function Resources() {
           <Row className="align-items-center">
             <Col xs={11}>
               <Form.Control
-                type="text"
+                as="textarea"
+                rows={1}
                 placeholder="Type your message..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault(); // Prevent form submission
-                    handleSend(); // Call your handleSend function
-                  }
-                }}
                 className="input-resource"
               />
             </Col>
