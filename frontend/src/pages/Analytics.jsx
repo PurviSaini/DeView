@@ -143,23 +143,33 @@ const Analytics = () => {
                 {/* Contribution Bar Chart */}
                 <div className="chart-container bar-chart">
                     <h3>Contribution</h3>
-                    <BarChart width={500} height={300} data={Object.entries(
-                        tasks.reduce((acc, task) => {
-                            acc[task.assignedTo] = (acc[task.assignedTo] || 0) + 1;
-                            return acc;
-                        }, {})
-                    ).map(([name, value]) => ({ name, Assigned: value, Completed: Math.floor(value / 2) }))}>
+                    <BarChart
+                        width={500}
+                        height={300}
+                        data={Object.entries(
+                            tasks.reduce((acc, task) => {
+                                if (!acc[task.assignedTo]) {
+                                    acc[task.assignedTo] = { name: task.assignedTo, Assigned: 0, Completed: 0 };
+                                }
+                                if (task.status === "to do" || task.status === "in progress") {
+                                    acc[task.assignedTo].Assigned += 1;
+                                }
+                                if (task.status === "completed") {
+                                    acc[task.assignedTo].Completed += 1;
+                                }
+                                return acc;
+                            }, {})
+                        ).map(([_, value]) => value)}
+                    >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="Assigned" fill="#FF6384" />
-                        <Bar dataKey="Completed" fill="#36A2EB" />
+                        <Bar dataKey="Assigned" fill="#FF6384" name="Assigned Tasks" />
+                        <Bar dataKey="Completed" fill="#36A2EB" name="Completed Tasks" />
                     </BarChart>
                 </div>
-
-                {/* Personal Tasks */}
                 <div className="chart-container personal-tasks">
                     <h3>Personal Tasks</h3>
                     <BarChart
