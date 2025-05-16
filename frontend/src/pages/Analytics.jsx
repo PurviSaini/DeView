@@ -129,24 +129,6 @@ const Analytics = () => {
                 {/* Personal Tasks */}
                 <div className="chart-container personal-tasks">
                     <h3>Personal Tasks</h3>
-                    <label htmlFor="member-select">Select Member: </label>
-                    <select
-                        id="member-select"
-                        value={selectedMember}
-                        onChange={(e) => setSelectedMember(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {Object.keys(
-                            tasks.reduce((acc, task) => {
-                                acc[task.assignedTo] = true;
-                                return acc;
-                            }, {})
-                        ).map((member) => (
-                            <option key={member} value={member}>
-                                {member}
-                            </option>
-                        ))}
-                    </select>
                     <BarChart
                         width={800}
                         height={300}
@@ -159,21 +141,21 @@ const Analytics = () => {
                                 if (task.status === "completed") {
                                     acc[task.assignedTo].completed += 1;
                                 } else if (task.status === "in progress") {
-                                    acc[task.assignedTo]["in progress" ]+= 1;
+                                    acc[task.assignedTo]["in progress"] += 1;
                                 }
                                 return acc;
                             }, {})
                         )
                             .map(([_, value]) => value)
-                            .filter((data) => selectedMember == "All" || data.name == selectedMember)}
+                            .filter((data) => data.name === localStorage.getItem("username"))}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip
                             formatter={(value, name, props) => {
-                                const taskNames = tasks 
-                                    .filter(task => task.assignedTo === props.payload.name && task.status == name)
+                                const taskNames = tasks
+                                    .filter(task => task.assignedTo === props.payload.name && task.status === name)
                                     .map(task => task.title)
                                     .join(` 🛑 `);
                                 return [`${taskNames} `, `${name} `];
