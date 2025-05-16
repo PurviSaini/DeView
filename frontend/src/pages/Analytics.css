@@ -33,6 +33,7 @@ div.task-container {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     overflow: auto;
+    height: fit-content;
 }
 
 /* First row: Pie chart (4 columns) and Heatmap (8 columns) */
@@ -44,13 +45,13 @@ div.task-container {
     grid-column: span 8; /* Takes 8 columns */
 }
 
-/* Second row: Bar chart (8 columns) and Personal tasks (4 columns) */
+/* Second row: Bar chart (7 columns) and Personal tasks (5 columns) */
 .bar-chart {
-    grid-column: span 4; /* Takes 8 columns */
+    grid-column: span 7; /* Takes 7 columns */
 }
 
 .personal-tasks {
-    grid-column: span 8; /* Takes 4 columns */
+    grid-column: span 5; /* Takes 5 columns */
 }
 
 .heatmap-placeholder,
