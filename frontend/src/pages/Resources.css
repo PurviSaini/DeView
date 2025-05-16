@@ -47,7 +47,7 @@ div.sender-name{
 }
 
 .btn-send{
-  max-width: 70%;
+  /* max-width: 70%; */
   height: 2.5rem;
   background-color: #16a637;
   border: none;
