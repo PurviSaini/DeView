@@ -42,6 +42,11 @@ const Analytics = () => {
     const uniqueAuthors = [...new Set(heatmapData.map(d => d.author))];
     console.log(uniqueAuthors);
 
+    const totalCommitsByContributor = heatmapData.reduce((acc, curr) => {
+        acc[curr.author] = (acc[curr.author] || 0) + curr.count;
+        return acc;
+      }, {});      
+
     const getColor = (count) => {
         if (count === 0) return "#ffe6eb";
         if (count <= 2) return "#ffb3bf";
@@ -59,7 +64,7 @@ const Analytics = () => {
                 {/* Task Allocation Pie Chart */}
                 <div className="chart-container pie-chart">
                     <h3>Task Allocation</h3>
-                    <PieChart width={400} height={300}>
+                    <PieChart width={300} height={300}>
                         <Pie
                             data={Object.entries(
                                 tasks.reduce((acc, task) => {
@@ -85,7 +90,7 @@ const Analytics = () => {
 
                 {/* Heatmap Placeholder */}
                 <div className="chart-container heatmap">
-                    <h3 className='mb-5'>Commit Heatmap</h3>
+                    <h3 className='mb-3'>Commit Heatmap</h3>
                     <ScatterChart
                         margin={{ top: 20, right: 20, bottom: 20, left: 50 }}
                         width={800} height={200} 
@@ -123,14 +128,42 @@ const Analytics = () => {
                             )}
                         />
                     </ScatterChart>
+                    <div style={{ marginTop: '20px' }}>
+                        <ul className='list-unstyled'>
+                            {Object.entries(totalCommitsByContributor).map(([author, count]) => (
+                                <li key={author}>
+                                    <strong>{author}:</strong> {count} commits
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
         
+                </div>
+
+                {/* Contribution Bar Chart */}
+                <div className="chart-container bar-chart">
+                    <h3>Contribution</h3>
+                    <BarChart width={500} height={300} data={Object.entries(
+                        tasks.reduce((acc, task) => {
+                            acc[task.assignedTo] = (acc[task.assignedTo] || 0) + 1;
+                            return acc;
+                        }, {})
+                    ).map(([name, value]) => ({ name, Assigned: value, Completed: Math.floor(value / 2) }))}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="Assigned" fill="#FF6384" />
+                        <Bar dataKey="Completed" fill="#36A2EB" />
+                    </BarChart>
                 </div>
 
                 {/* Personal Tasks */}
                 <div className="chart-container personal-tasks">
                     <h3>Personal Tasks</h3>
                     <BarChart
-                        width={800}
+                        width={300}
                         height={300}
                         data={Object.entries(
                             tasks.reduce((acc, task) => {
@@ -167,24 +200,7 @@ const Analytics = () => {
                         <Bar dataKey="in progress" fill="#ffc658" />
                     </BarChart>
                 </div>
-                {/* Contribution Bar Chart */}
-                <div className="chart-container bar-chart">
-                    <h3>Contribution</h3>
-                    <BarChart width={400} height={300} data={Object.entries(
-                        tasks.reduce((acc, task) => {
-                            acc[task.assignedTo] = (acc[task.assignedTo] || 0) + 1;
-                            return acc;
-                        }, {})
-                    ).map(([name, value]) => ({ name, Assigned: value, Completed: Math.floor(value / 2) }))}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="Assigned" fill="#FF6384" />
-                        <Bar dataKey="Completed" fill="#36A2EB" />
-                    </BarChart>
-                </div>
+                
 
 
             </div>
