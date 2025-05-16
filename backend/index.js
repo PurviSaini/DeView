@@ -12,6 +12,7 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const sgMail = require('@sendgrid/mail');
 const {userAuth} = require('./src/middlewares/auth');
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(cors(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 connectDB().then(()=>{
     console.log("Database Connection Established");
@@ -168,8 +170,58 @@ app.post("/tasks",userAuth, async (req, res) => {
       status: status,
       dueDate: dueDate
     });
-
+    const creator = req.user.username;
+    const assignee = await User.findOne({username: assignedTo});
     await task.save();
+    const msg = {
+      to: assignee.email,
+      from: process.env.VERIFIED_SENDER_EMAIL,
+      subject: '✏️Task Assigned | DeView',
+      html: `
+      <div style="max-width: 650px; margin: 40px auto; padding: 25px; background: linear-gradient(135deg, #E0FFFF, pink); border-radius: 40px; box-shadow: 0 18px 20px rgba(0, 0, 0, 0.1); font-family: 'Poppins, Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #2c3e50;">
+      <h1 style="font-size: 30px; margin-bottom: 20px; color: #2c3e50; text-align: center; border-bottom: 2px solid #dfe6e9; padding-bottom: 10px;">
+        ${task.title}
+      </h1>
+
+      <p style="margin: 12px 0; font-size: 16px;">
+        <strong>Description:</strong>
+        <span style="color: #6c5ce7;">${desc}</span>
+      </p>
+
+      <p style="margin: 12px 0; font-size: 16px;">
+        <strong>Assigned By:</strong>
+        <span style="color: red;">${creator}</span>
+      </p>
+
+      <p style="margin: 12px 0; font-size: 16px;">
+        <strong>Priority:</strong>
+        <span style="background-color: #f39c12; color: white; padding: 4px 10px; border-radius: 12px; font-size: 14px; margin-left: 8px;">
+          ${priority}
+        </span>
+      </p>
+
+      <p style="margin: 12px 0; font-size: 16px;">
+        <strong>Status:</strong>
+        <span style="background-color: #3498db; color: white; padding: 4px 10px; border-radius: 12px; font-size: 14px; margin-left: 8px;">
+          To Do
+        </span>
+      </p>
+
+      <p style="margin: 12px 0; font-size: 16px;">
+        <strong>Due Date:</strong>
+        <span style="color:rgb(124, 124, 124); font-weight: bold;">${dueDate}</span>
+      </p>
+    </div>
+      `,
+    }
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log('Email sent')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
     res.status(201).json({ task });
   } catch (err) {
     console.error(err);

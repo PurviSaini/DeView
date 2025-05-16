@@ -130,7 +130,7 @@ export default function Task(){
                 desc:"",
             });
             setOpenForm(false);
-            toast.success("Task added successfully!");
+            toast.success("Task Added & Assignee is Notified!!");
         } catch (err) {
             toast.error("Failed to add task");
             console.error(err);
