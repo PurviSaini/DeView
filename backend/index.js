@@ -570,8 +570,11 @@ app.get("/commits", userAuth, async (req, res) => {
       const heatmapData = {};
 
       allCommits.forEach(({ author, timestamp }) => {
+        // Convert timestamp to IST (UTC+5:30)
         const date = new Date(timestamp);
-        const hour = date.getHours();
+        const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in ms
+        const istDate = new Date(date.getTime() + istOffset);
+        const hour = istDate.getHours();
 
         if (!heatmapData[author]) {
           heatmapData[author] = Array(24).fill(0);

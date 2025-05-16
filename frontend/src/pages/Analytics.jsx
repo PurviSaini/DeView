@@ -96,14 +96,14 @@ const Analytics = () => {
                             name="Hour"
                             domain={[0, 23]}
                             tickCount={24}
-                            label={{ value: "Hour of Day", position: "insideBottom", offset: -10 }}
+                            label={{ value: "Hours of Day", position: "insideBottom", offset: -10 }}
                         />
                         <YAxis
                             type="category"
                             dataKey="author"
-                            name="Contributor"
+                            name="contributor"
                             allowDuplicatedCategory={false}
-                            label={{ value: "Contributor", angle: -90, position: "insideLeft" }}
+                            label={{ value: "", angle: -90, position: "insideLeft" }}
                         />
                         <ZAxis type="number" dataKey="count" range={[10,60]}/>
                         <Tooltip/>
