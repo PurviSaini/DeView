@@ -17,26 +17,26 @@ const Sidebar = () => {
         <FaBars size={18} className="ms-2" />
       </div>
       <NavLink to="/task" className="sidebar-link">
-        <FaTasks className="me-2" size={18} style={{color:"#6D43C0"}}/>{!isCollapsed && "Tasks"}
+        <FaTasks className="me-2" size={18} style={{color:"#6D43C0"}} title="Tasks"/>{!isCollapsed && "Tasks"}
       </NavLink>
       <NavLink to="/ideator" className="sidebar-link">
-        <FaLightbulb className="me-2" size={18} style={{color:"#EDCA3A"}} />
+        <FaLightbulb className="me-2" size={18} style={{color:"#EDCA3A"}} title="Ideator"/>
         {!isCollapsed && "Ideator"}
       </NavLink>
       <NavLink to="/documentation" className="sidebar-link">
-        <FaFileAlt className="me-2" size={18} style={{color:"#37AC51"}}/>
-        {!isCollapsed && "Docs"}
+        <FaFileAlt className="me-2" size={18} style={{color:"#37AC51"}} title="Documentation"/>
+        {!isCollapsed && "Doc"}
       </NavLink>
       <NavLink to="/git-stats" className="sidebar-link">
-        <FaChartBar className="me-2" size={18} style={{color:"#FF007C"}}/>
+        <FaChartBar className="me-2" size={18} style={{color:"#FF007C"}} title="Github Stats"/>
         {!isCollapsed && "Stats"}
       </NavLink>
       <NavLink to="/resources" className="sidebar-link">
-        <FaTools className="me-2" size={18} style={{color:"#74EE15"}}/>
+        <FaTools className="me-2" size={18} style={{color:"#74EE15"}} title="Resources"/>
         {!isCollapsed && "Resources"}
       </NavLink>
       <NavLink to="/analytics" className="sidebar-link">
-        <FaChartLine className="me-2" size={18} style={{color:"#36A2EB"}}/>
+        <FaChartLine className="me-2" size={18} style={{color:"#36A2EB"}} title="Analytics"/>
         {!isCollapsed && "Analytics"}
       </NavLink>
     </div>
