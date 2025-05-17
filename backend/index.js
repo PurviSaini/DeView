@@ -175,8 +175,8 @@ app.post("/tasks",userAuth, async (req, res) => {
     await task.save();
     const msg = {
       to: assignee.email,
-      from: process.env.VERIFIED_SENDER_EMAIL,
-      subject: '✏️Task Assigned | DeView',
+      from: {name:"DeView",email:process.env.VERIFIED_SENDER_EMAIL},
+      subject: '✨New Task Assigned | DeView',
       html: `
       <div style="max-width: 650px; margin: 40px auto; padding: 25px; background: linear-gradient(135deg, #E0FFFF, pink); border-radius: 40px; box-shadow: 0 18px 20px rgba(0, 0, 0, 0.1); font-family: 'Poppins, Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #2c3e50;">
       <h1 style="font-size: 30px; margin-bottom: 20px; color: #2c3e50; text-align: center; border-bottom: 2px solid #dfe6e9; padding-bottom: 10px;">
