@@ -214,7 +214,7 @@ app.post("/tasks",userAuth, async (req, res) => {
     </div>
       `,
     }
-    sgMail
+   await sgMail
       .send(msg)
       .then(() => {
         console.log('Email sent')
