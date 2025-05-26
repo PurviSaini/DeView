@@ -110,10 +110,7 @@ const Analytics = () => {
 
           {heatmapData.length === 0 ? (
             <Placeholder as="div" animation="glow">
-              <Placeholder
-                xs={12}
-                style={{ height: "200px", width: "100%" }}
-              />
+              <Placeholder xs={12} style={{ height: "200px", width: "100%" }} />
             </Placeholder>
           ) : (
             <>
@@ -223,8 +220,9 @@ const Analytics = () => {
                     "in progress": 0,
                   };
                 }
-                acc[task.assignedTo]["to do"] += 1;
-                if (task.status === "completed") {
+                if (task.status === "to do") {
+                  acc[task.assignedTo]["to do"] += 1;
+                } else if (task.status === "completed") {
                   acc[task.assignedTo].completed += 1;
                 } else if (task.status === "in progress") {
                   acc[task.assignedTo]["in progress"] += 1;
